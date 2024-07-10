@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: RiceFertileAi()));
@@ -11,31 +12,9 @@ class RiceFertileAi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Rice Fertile AI',
       home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rice Fertile AI'),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Welcome to Rice Fertile AI',
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
