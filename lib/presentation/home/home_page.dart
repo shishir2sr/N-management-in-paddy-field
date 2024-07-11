@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
+import 'package:rice_fertile_ai/infrastructure/image_processing_repository.dart';
+import 'package:rice_fertile_ai/presentation/home/camera_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
 
 class HomePage extends ConsumerWidget {
@@ -10,6 +12,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final deviceWidth = MediaQuery.of(context).size.width;
     var listContentWidth = (deviceWidth - 60) / 10;
+    final repository = ref.watch(imageProcessingRepositoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -27,8 +30,7 @@ class HomePage extends ConsumerWidget {
       ),
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
-          selectFromCamera:
-              () {}, //_recognitions.length < 10 ? selectFromCamera : () {},
+          selectFromCamera: Navigator.of(context).push(CameraPage(controller: , onImageCapture: onImageCapture)), //_recognitions.length < 10 ? selectFromCamera : () {},
           restartProgress: () {}, // resetPrediction,
           selectFromGallery: () {}
           //_recognitions.length < 10 ? selectFromImagePicker : () {},
