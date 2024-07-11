@@ -13,7 +13,7 @@ class RiceFertileAi extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Rice Fertile AI',
+      title: 'RiceFertile AI',
       home: HomePage(),
     );
   }

@@ -27,7 +27,7 @@ class BottomNavBar extends StatelessWidget {
             offset: const Offset(1, 3), // changes position of shadow
           ),
         ],
-        color: ColorConstants.scaffoldBackgroundColor,
+        color: ColorConstants.primaryBackgroundColor,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(30),
           topRight: Radius.circular(30),
@@ -38,36 +38,36 @@ class BottomNavBar extends StatelessWidget {
         children: [
           LccButtonWidget(
             onPressFunction: selectFromGallery,
-            buttonColor: ColorConstants.secondaryButtonColor,
+            buttonColor: ColorConstants.secondaryBackgroundColor,
             buttonIcon: Icon(
               Icons.photo_library_outlined,
-              color: ColorConstants.primaryColor.withOpacity(0.8),
+              color: ColorConstants.primaryGreen.withOpacity(0.8),
               size: 26,
               weight: FontWeight.bold.value.toDouble(),
             ),
-            borderSide:
-                const BorderSide(color: ColorConstants.secondaryButtonColor),
+            borderSide: const BorderSide(
+                color: ColorConstants.secondaryBackgroundColor),
           ),
           LccButtonWidget(
             onPressFunction: selectFromCamera,
-            buttonColor: ColorConstants.primaryColor,
+            buttonColor: ColorConstants.primaryGreen,
             buttonIcon: LccIcons.leafIcon,
             borderSide: const BorderSide(
                 width: 0.70,
-                color: ColorConstants.accentColor,
+                color: ColorConstants.secondaryGreen,
                 strokeAlign: 15),
           ),
           LccButtonWidget(
             onPressFunction: restartProgress,
-            buttonColor: ColorConstants.secondaryButtonColor,
+            buttonColor: ColorConstants.secondaryBackgroundColor,
             buttonIcon: Icon(
               Icons.restart_alt_outlined,
-              color: ColorConstants.primaryColor.withOpacity(0.8),
+              color: ColorConstants.primaryGreen.withOpacity(0.8),
               size: 30,
               weight: FontWeight.bold.value.toDouble(),
             ),
-            borderSide:
-                const BorderSide(color: ColorConstants.secondaryButtonColor),
+            borderSide: const BorderSide(
+                color: ColorConstants.secondaryBackgroundColor),
           ),
         ],
       ),

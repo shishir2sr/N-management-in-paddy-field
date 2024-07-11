@@ -2,8 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+  <string>$(DEVELOPMENT_LANGUAGE)</string>
+  <key>NSCameraUsageDescription</key>
+  <string>This app requires camera access to capture images of paddy fields for analysis and nitrogen fertilizer recommendation.</string>
 	<key>CFBundleDisplayName</key>
 	<string>Rice Fertile Ai</string>
 	<key>CFBundleExecutable</key>

@@ -14,7 +14,7 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: ColorConstants.primaryColor,
+        backgroundColor: ColorConstants.primaryGreen,
         title: const Text(
           'Rice Fertile AI',
           style: TextStyle(
