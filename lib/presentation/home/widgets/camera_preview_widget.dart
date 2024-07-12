@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/camera_screen_bottom_bar_widget.dart';
 
 class CameraPreviewWidget extends ConsumerWidget {
   const CameraPreviewWidget({
@@ -9,7 +9,7 @@ class CameraPreviewWidget extends ConsumerWidget {
     required this.controller,
     required this.onImageCapture,
   });
-  final CameraController controller;
+  final CameraController? controller;
   final Function() onImageCapture;
 
   @override
@@ -17,19 +17,15 @@ class CameraPreviewWidget extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 26),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            flex: 7,
-            child: CameraPreview(controller),
-          ),
-          Flexible(
-            flex: 2,
-            child: Center(
-              child: CameraScreenBottomBarWidget(
-                onImageCapture: onImageCapture,
+          if (controller != null)
+            Expanded(
+              flex: 7,
+              child: Center(
+                child: CameraPreview(controller!),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -23,8 +23,8 @@ class CustomSvgIcon extends StatelessWidget {
       assetPath,
       height: height,
       width: width,
-      color: color,
       semanticsLabel: semanticsLabel,
+      colorFilter: ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
     );
   }
 }
