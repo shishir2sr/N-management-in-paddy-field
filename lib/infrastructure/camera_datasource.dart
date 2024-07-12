@@ -54,7 +54,7 @@ class LccCameraDataSource extends CameraDataSource {
 }
 
 // * CameraServiceProvider
-final cameraDataSourceProvider = Provider.autoDispose<CameraDataSource>((ref) {
+final cameraDataSourceProvider = Provider<CameraDataSource>((ref) {
   return LccCameraDataSource();
 });
 

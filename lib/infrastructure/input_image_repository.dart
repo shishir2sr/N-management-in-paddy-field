@@ -31,8 +31,7 @@ class InputImageRepository {
 }
 
 // * ImageProcessingRepositoryProvider
-final imageProcessingRepositoryProvider =
-    Provider.autoDispose<InputImageRepository>((ref) {
+final imageProcessingRepositoryProvider = Provider<InputImageRepository>((ref) {
   final cameraService = ref.watch(cameraDataSourceProvider);
   return InputImageRepository(cameraService);
 });

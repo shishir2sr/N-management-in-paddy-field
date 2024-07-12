@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
 import 'package:rice_fertile_ai/infrastructure/input_image_repository.dart';
 part 'image_processror_notifier_provider.freezed.dart';
 
@@ -20,24 +20,18 @@ class ImageProcessorState with _$ImageProcessorState {
 
 // * ImageProcessorNotifier
 
-class ImageProcessorNotifier
-    extends AutoDisposeAsyncNotifier<ImageProcessorState> {
+class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
   @override
   FutureOr<ImageProcessorState> build() {
     return ImageProcessorState.initial();
   }
 
-  void captureImage() async {
+  void captureImage({required CameraController controller}) async {
     state = const AsyncLoading();
-    final controller = ref.watch(cameraControllerProviderProvider).value;
+
     final repo = ref.watch(imageProcessingRepositoryProvider);
 
-    if (controller == null) {
-      state =
-          AsyncError('Camera controller not initialized', StackTrace.current);
-    }
-
-    final result = await repo.takePicture(controller: controller!);
+    final result = await repo.takePicture(controller: controller);
 
     // fold the result
     result.fold(
@@ -55,5 +49,6 @@ class ImageProcessorNotifier
   }
 }
 
-final imageProcessorProvider = AsyncNotifierProvider.autoDispose<
-    ImageProcessorNotifier, ImageProcessorState>(ImageProcessorNotifier.new);
+final imageProcessorProvider =
+    AsyncNotifierProvider<ImageProcessorNotifier, ImageProcessorState>(
+        ImageProcessorNotifier.new);

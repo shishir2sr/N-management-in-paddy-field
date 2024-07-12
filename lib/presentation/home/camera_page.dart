@@ -43,7 +43,9 @@ class CameraPage extends ConsumerWidget {
           backgroundColor: Colors.black,
           iconTheme: const IconThemeData(color: Colors.white)),
       bottomNavigationBar: CameraScreenBottomBarWidget(
-        onImageCapture: ref.read(imageProcessorProvider.notifier).captureImage,
+        onImageCapture: () => ref
+            .read(imageProcessorProvider.notifier)
+            .captureImage(controller: cameraController.value!),
       ),
       body: cameraController.maybeMap(
         orElse: () => const Text('Camera controller not initialized'),
