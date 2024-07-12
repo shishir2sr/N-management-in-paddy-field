@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
+import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/camera_preview_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/camera_screen_bottom_bar_widget.dart';
 
@@ -35,20 +36,25 @@ class CameraPage extends ConsumerWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Camera'),
-      ),
+      backgroundColor: Colors.black,
+      appBar: getAppBar(
+          title: "Capture Paddy Image",
+          backgroundColor: Colors.black,
+          iconTheme: const IconThemeData(color: Colors.white)),
       bottomNavigationBar: CameraScreenBottomBarWidget(
         onImageCapture: () {},
       ),
       body: cameraController.maybeMap(
-          orElse: () => const Text('Camera controller not initialized'),
-          loading: (_) => const Center(
-                  child: CupertinoActivityIndicator(
-                color: ColorConstants.secondaryGreen,
-              )),
-          data: (controller) => CameraPreviewWidget(
-              controller: controller.value, onImageCapture: () {})),
+        orElse: () => const Text('Camera controller not initialized'),
+        loading: (_) => const Center(
+            child: CupertinoActivityIndicator(
+          color: ColorConstants.secondaryGreen,
+        )),
+        data: (controller) => CameraPreviewWidget(
+          controller: controller.value,
+          onImageCapture: () {},
+        ),
+      ),
     );
   }
 }

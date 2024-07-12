@@ -14,19 +14,7 @@ class HomePage extends ConsumerWidget {
       bottom: false,
       maintainBottomViewPadding: true,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: ColorConstants.primaryGreen,
-          title: const Text(
-            'Rice Fertile AI',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Poppins',
-            ),
-          ),
-        ),
+        appBar: getAppBar(title: "RiceFertile AI"),
         backgroundColor: Colors.white,
         bottomNavigationBar: BottomNavBar(
             selectFromCamera: () {
@@ -54,4 +42,25 @@ class HomePage extends ConsumerWidget {
       ),
     );
   }
+}
+
+AppBar getAppBar({
+  required String title,
+  Color backgroundColor = ColorConstants.primaryGreen,
+  IconThemeData? iconTheme,
+}) {
+  return AppBar(
+    centerTitle: true,
+    backgroundColor: backgroundColor,
+    iconTheme: iconTheme,
+    title: Text(
+      title,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Poppins',
+      ),
+    ),
+  );
 }

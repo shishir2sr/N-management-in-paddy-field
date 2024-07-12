@@ -23,7 +23,9 @@ class CameraPreviewWidget extends ConsumerWidget {
             Expanded(
               flex: 7,
               child: Center(
-                child: CameraPreview(controller!),
+                child: CameraPreview(
+                  controller!,
+                ),
               ),
             ),
         ],
