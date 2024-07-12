@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/camera_screen_icon_button.dart';
 
 class CameraScreenBottomBarWidget extends StatelessWidget {
   const CameraScreenBottomBarWidget({
@@ -16,10 +15,11 @@ class CameraScreenBottomBarWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       color: const Color.fromARGB(130, 0, 0, 0),
       child: Padding(
-          padding: const EdgeInsets.only(bottom: 30),
-          child: CaptureImageButton(
-            selectFromCamera: onImageCapture,
-          )),
+        padding: const EdgeInsets.only(bottom: 30),
+        child: CaptureImageButton(
+          selectFromCamera: onImageCapture,
+        ),
+      ),
     );
   }
 }

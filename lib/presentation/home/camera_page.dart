@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
@@ -42,7 +43,7 @@ class CameraPage extends ConsumerWidget {
           backgroundColor: Colors.black,
           iconTheme: const IconThemeData(color: Colors.white)),
       bottomNavigationBar: CameraScreenBottomBarWidget(
-        onImageCapture: () {},
+        onImageCapture: ref.read(imageProcessorProvider.notifier).captureImage,
       ),
       body: cameraController.maybeMap(
         orElse: () => const Text('Camera controller not initialized'),
@@ -52,7 +53,6 @@ class CameraPage extends ConsumerWidget {
         )),
         data: (controller) => CameraPreviewWidget(
           controller: controller.value,
-          onImageCapture: () {},
         ),
       ),
     );

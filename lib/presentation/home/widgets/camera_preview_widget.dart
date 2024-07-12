@@ -7,10 +7,8 @@ class CameraPreviewWidget extends ConsumerWidget {
   const CameraPreviewWidget({
     super.key,
     required this.controller,
-    required this.onImageCapture,
   });
   final CameraController? controller;
-  final Function() onImageCapture;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

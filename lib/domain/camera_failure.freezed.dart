@@ -22,6 +22,7 @@ mixin _$CameraFailure {
     required TResult Function(String msg) cameraAccessDenied,
     required TResult Function(String msg) previuslyDenied,
     required TResult Function(String msg) accessRestricted,
+    required TResult Function(String msg) cameraException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,6 +30,7 @@ mixin _$CameraFailure {
     TResult? Function(String msg)? cameraAccessDenied,
     TResult? Function(String msg)? previuslyDenied,
     TResult? Function(String msg)? accessRestricted,
+    TResult? Function(String msg)? cameraException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,6 +38,7 @@ mixin _$CameraFailure {
     TResult Function(String msg)? cameraAccessDenied,
     TResult Function(String msg)? previuslyDenied,
     TResult Function(String msg)? accessRestricted,
+    TResult Function(String msg)? cameraException,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +47,7 @@ mixin _$CameraFailure {
     required TResult Function(_CameraAccessDenied value) cameraAccessDenied,
     required TResult Function(_PreviuslyDenied value) previuslyDenied,
     required TResult Function(_AccessRestricted value) accessRestricted,
+    required TResult Function(_CameraException value) cameraException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -51,6 +55,7 @@ mixin _$CameraFailure {
     TResult? Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult? Function(_PreviuslyDenied value)? previuslyDenied,
     TResult? Function(_AccessRestricted value)? accessRestricted,
+    TResult? Function(_CameraException value)? cameraException,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,6 +63,7 @@ mixin _$CameraFailure {
     TResult Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult Function(_PreviuslyDenied value)? previuslyDenied,
     TResult Function(_AccessRestricted value)? accessRestricted,
+    TResult Function(_CameraException value)? cameraException,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -170,6 +176,7 @@ class _$CameraAccessDeniedImpl extends _CameraAccessDenied {
     required TResult Function(String msg) cameraAccessDenied,
     required TResult Function(String msg) previuslyDenied,
     required TResult Function(String msg) accessRestricted,
+    required TResult Function(String msg) cameraException,
   }) {
     return cameraAccessDenied(msg);
   }
@@ -180,6 +187,7 @@ class _$CameraAccessDeniedImpl extends _CameraAccessDenied {
     TResult? Function(String msg)? cameraAccessDenied,
     TResult? Function(String msg)? previuslyDenied,
     TResult? Function(String msg)? accessRestricted,
+    TResult? Function(String msg)? cameraException,
   }) {
     return cameraAccessDenied?.call(msg);
   }
@@ -190,6 +198,7 @@ class _$CameraAccessDeniedImpl extends _CameraAccessDenied {
     TResult Function(String msg)? cameraAccessDenied,
     TResult Function(String msg)? previuslyDenied,
     TResult Function(String msg)? accessRestricted,
+    TResult Function(String msg)? cameraException,
     required TResult orElse(),
   }) {
     if (cameraAccessDenied != null) {
@@ -204,6 +213,7 @@ class _$CameraAccessDeniedImpl extends _CameraAccessDenied {
     required TResult Function(_CameraAccessDenied value) cameraAccessDenied,
     required TResult Function(_PreviuslyDenied value) previuslyDenied,
     required TResult Function(_AccessRestricted value) accessRestricted,
+    required TResult Function(_CameraException value) cameraException,
   }) {
     return cameraAccessDenied(this);
   }
@@ -214,6 +224,7 @@ class _$CameraAccessDeniedImpl extends _CameraAccessDenied {
     TResult? Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult? Function(_PreviuslyDenied value)? previuslyDenied,
     TResult? Function(_AccessRestricted value)? accessRestricted,
+    TResult? Function(_CameraException value)? cameraException,
   }) {
     return cameraAccessDenied?.call(this);
   }
@@ -224,6 +235,7 @@ class _$CameraAccessDeniedImpl extends _CameraAccessDenied {
     TResult Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult Function(_PreviuslyDenied value)? previuslyDenied,
     TResult Function(_AccessRestricted value)? accessRestricted,
+    TResult Function(_CameraException value)? cameraException,
     required TResult orElse(),
   }) {
     if (cameraAccessDenied != null) {
@@ -316,6 +328,7 @@ class _$PreviuslyDeniedImpl extends _PreviuslyDenied {
     required TResult Function(String msg) cameraAccessDenied,
     required TResult Function(String msg) previuslyDenied,
     required TResult Function(String msg) accessRestricted,
+    required TResult Function(String msg) cameraException,
   }) {
     return previuslyDenied(msg);
   }
@@ -326,6 +339,7 @@ class _$PreviuslyDeniedImpl extends _PreviuslyDenied {
     TResult? Function(String msg)? cameraAccessDenied,
     TResult? Function(String msg)? previuslyDenied,
     TResult? Function(String msg)? accessRestricted,
+    TResult? Function(String msg)? cameraException,
   }) {
     return previuslyDenied?.call(msg);
   }
@@ -336,6 +350,7 @@ class _$PreviuslyDeniedImpl extends _PreviuslyDenied {
     TResult Function(String msg)? cameraAccessDenied,
     TResult Function(String msg)? previuslyDenied,
     TResult Function(String msg)? accessRestricted,
+    TResult Function(String msg)? cameraException,
     required TResult orElse(),
   }) {
     if (previuslyDenied != null) {
@@ -350,6 +365,7 @@ class _$PreviuslyDeniedImpl extends _PreviuslyDenied {
     required TResult Function(_CameraAccessDenied value) cameraAccessDenied,
     required TResult Function(_PreviuslyDenied value) previuslyDenied,
     required TResult Function(_AccessRestricted value) accessRestricted,
+    required TResult Function(_CameraException value) cameraException,
   }) {
     return previuslyDenied(this);
   }
@@ -360,6 +376,7 @@ class _$PreviuslyDeniedImpl extends _PreviuslyDenied {
     TResult? Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult? Function(_PreviuslyDenied value)? previuslyDenied,
     TResult? Function(_AccessRestricted value)? accessRestricted,
+    TResult? Function(_CameraException value)? cameraException,
   }) {
     return previuslyDenied?.call(this);
   }
@@ -370,6 +387,7 @@ class _$PreviuslyDeniedImpl extends _PreviuslyDenied {
     TResult Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult Function(_PreviuslyDenied value)? previuslyDenied,
     TResult Function(_AccessRestricted value)? accessRestricted,
+    TResult Function(_CameraException value)? cameraException,
     required TResult orElse(),
   }) {
     if (previuslyDenied != null) {
@@ -461,6 +479,7 @@ class _$AccessRestrictedImpl extends _AccessRestricted {
     required TResult Function(String msg) cameraAccessDenied,
     required TResult Function(String msg) previuslyDenied,
     required TResult Function(String msg) accessRestricted,
+    required TResult Function(String msg) cameraException,
   }) {
     return accessRestricted(msg);
   }
@@ -471,6 +490,7 @@ class _$AccessRestrictedImpl extends _AccessRestricted {
     TResult? Function(String msg)? cameraAccessDenied,
     TResult? Function(String msg)? previuslyDenied,
     TResult? Function(String msg)? accessRestricted,
+    TResult? Function(String msg)? cameraException,
   }) {
     return accessRestricted?.call(msg);
   }
@@ -481,6 +501,7 @@ class _$AccessRestrictedImpl extends _AccessRestricted {
     TResult Function(String msg)? cameraAccessDenied,
     TResult Function(String msg)? previuslyDenied,
     TResult Function(String msg)? accessRestricted,
+    TResult Function(String msg)? cameraException,
     required TResult orElse(),
   }) {
     if (accessRestricted != null) {
@@ -495,6 +516,7 @@ class _$AccessRestrictedImpl extends _AccessRestricted {
     required TResult Function(_CameraAccessDenied value) cameraAccessDenied,
     required TResult Function(_PreviuslyDenied value) previuslyDenied,
     required TResult Function(_AccessRestricted value) accessRestricted,
+    required TResult Function(_CameraException value) cameraException,
   }) {
     return accessRestricted(this);
   }
@@ -505,6 +527,7 @@ class _$AccessRestrictedImpl extends _AccessRestricted {
     TResult? Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult? Function(_PreviuslyDenied value)? previuslyDenied,
     TResult? Function(_AccessRestricted value)? accessRestricted,
+    TResult? Function(_CameraException value)? cameraException,
   }) {
     return accessRestricted?.call(this);
   }
@@ -515,6 +538,7 @@ class _$AccessRestrictedImpl extends _AccessRestricted {
     TResult Function(_CameraAccessDenied value)? cameraAccessDenied,
     TResult Function(_PreviuslyDenied value)? previuslyDenied,
     TResult Function(_AccessRestricted value)? accessRestricted,
+    TResult Function(_CameraException value)? cameraException,
     required TResult orElse(),
   }) {
     if (accessRestricted != null) {
@@ -533,5 +557,156 @@ abstract class _AccessRestricted extends CameraFailure {
   @override
   @JsonKey(ignore: true)
   _$$AccessRestrictedImplCopyWith<_$AccessRestrictedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CameraExceptionImplCopyWith<$Res>
+    implements $CameraFailureCopyWith<$Res> {
+  factory _$$CameraExceptionImplCopyWith(_$CameraExceptionImpl value,
+          $Res Function(_$CameraExceptionImpl) then) =
+      __$$CameraExceptionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String msg});
+}
+
+/// @nodoc
+class __$$CameraExceptionImplCopyWithImpl<$Res>
+    extends _$CameraFailureCopyWithImpl<$Res, _$CameraExceptionImpl>
+    implements _$$CameraExceptionImplCopyWith<$Res> {
+  __$$CameraExceptionImplCopyWithImpl(
+      _$CameraExceptionImpl _value, $Res Function(_$CameraExceptionImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? msg = null,
+  }) {
+    return _then(_$CameraExceptionImpl(
+      null == msg
+          ? _value.msg
+          : msg // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CameraExceptionImpl extends _CameraException {
+  const _$CameraExceptionImpl(this.msg) : super._();
+
+  @override
+  final String msg;
+
+  @override
+  String toString() {
+    return 'CameraFailure.cameraException(msg: $msg)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CameraExceptionImpl &&
+            (identical(other.msg, msg) || other.msg == msg));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, msg);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CameraExceptionImplCopyWith<_$CameraExceptionImpl> get copyWith =>
+      __$$CameraExceptionImplCopyWithImpl<_$CameraExceptionImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String msg) cameraAccessDenied,
+    required TResult Function(String msg) previuslyDenied,
+    required TResult Function(String msg) accessRestricted,
+    required TResult Function(String msg) cameraException,
+  }) {
+    return cameraException(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String msg)? cameraAccessDenied,
+    TResult? Function(String msg)? previuslyDenied,
+    TResult? Function(String msg)? accessRestricted,
+    TResult? Function(String msg)? cameraException,
+  }) {
+    return cameraException?.call(msg);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String msg)? cameraAccessDenied,
+    TResult Function(String msg)? previuslyDenied,
+    TResult Function(String msg)? accessRestricted,
+    TResult Function(String msg)? cameraException,
+    required TResult orElse(),
+  }) {
+    if (cameraException != null) {
+      return cameraException(msg);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CameraAccessDenied value) cameraAccessDenied,
+    required TResult Function(_PreviuslyDenied value) previuslyDenied,
+    required TResult Function(_AccessRestricted value) accessRestricted,
+    required TResult Function(_CameraException value) cameraException,
+  }) {
+    return cameraException(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CameraAccessDenied value)? cameraAccessDenied,
+    TResult? Function(_PreviuslyDenied value)? previuslyDenied,
+    TResult? Function(_AccessRestricted value)? accessRestricted,
+    TResult? Function(_CameraException value)? cameraException,
+  }) {
+    return cameraException?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CameraAccessDenied value)? cameraAccessDenied,
+    TResult Function(_PreviuslyDenied value)? previuslyDenied,
+    TResult Function(_AccessRestricted value)? accessRestricted,
+    TResult Function(_CameraException value)? cameraException,
+    required TResult orElse(),
+  }) {
+    if (cameraException != null) {
+      return cameraException(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CameraException extends CameraFailure {
+  const factory _CameraException(final String msg) = _$CameraExceptionImpl;
+  const _CameraException._() : super._();
+
+  @override
+  String get msg;
+  @override
+  @JsonKey(ignore: true)
+  _$$CameraExceptionImplCopyWith<_$CameraExceptionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
