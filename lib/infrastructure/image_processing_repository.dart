@@ -3,10 +3,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/domain/camera_failure.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_service.dart';
 
-class ImageProcessingRepository {
+class InputImageRepository {
   final CameraService _cameraService;
 
-  ImageProcessingRepository(this._cameraService);
+  InputImageRepository(this._cameraService);
 
   CameraController get cameraController => _cameraService.controller;
 
@@ -27,7 +27,7 @@ class ImageProcessingRepository {
 
 // * ImageProcessingRepositoryProvider
 final imageProcessingRepositoryProvider =
-    Provider.autoDispose<ImageProcessingRepository>((ref) {
+    Provider.autoDispose<InputImageRepository>((ref) {
   final cameraService = ref.watch(cameraServiceProvider);
-  return ImageProcessingRepository(cameraService);
+  return InputImageRepository(cameraService);
 });

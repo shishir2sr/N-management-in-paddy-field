@@ -30,7 +30,17 @@ class HomePage extends ConsumerWidget {
       ),
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavBar(
-          selectFromCamera: Navigator.of(context).push(CameraPage(controller: , onImageCapture: onImageCapture)), //_recognitions.length < 10 ? selectFromCamera : () {},
+          selectFromCamera: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CameraPage(
+                  controller: repository.cameraController,
+                  onImageCapture: () {},
+                ),
+              ),
+            );
+          }, //_recognitions.length < 10 ? selectFromCamera : () {},
           restartProgress: () {}, // resetPrediction,
           selectFromGallery: () {}
           //_recognitions.length < 10 ? selectFromImagePicker : () {},
