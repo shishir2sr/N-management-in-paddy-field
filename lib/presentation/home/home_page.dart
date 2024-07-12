@@ -9,42 +9,47 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: ColorConstants.primaryGreen,
-        title: const Text(
-          'Rice Fertile AI',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
+    return SafeArea(
+      top: false,
+      bottom: false,
+      maintainBottomViewPadding: true,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: ColorConstants.primaryGreen,
+          title: const Text(
+            'Rice Fertile AI',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+            ),
           ),
         ),
-      ),
-      backgroundColor: Colors.white,
-      bottomNavigationBar: BottomNavBar(
-          selectFromCamera: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CameraPage(),
-              ),
-            );
-          }, //_recognitions.length < 10 ? selectFromCamera : () {},
-          restartProgress: () {}, // resetPrediction,
-          selectFromGallery: () {}
-          //_recognitions.length < 10 ? selectFromImagePicker : () {},
-          ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Welcome to Rice Fertile AI',
+        backgroundColor: Colors.white,
+        bottomNavigationBar: BottomNavBar(
+            selectFromCamera: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CameraPage(),
+                ),
+              );
+            }, //_recognitions.length < 10 ? selectFromCamera : () {},
+            restartProgress: () {}, // resetPrediction,
+            selectFromGallery: () {}
+            //_recognitions.length < 10 ? selectFromImagePicker : () {},
             ),
-          ],
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Welcome to Rice Fertile AI',
+              ),
+            ],
+          ),
         ),
       ),
     );

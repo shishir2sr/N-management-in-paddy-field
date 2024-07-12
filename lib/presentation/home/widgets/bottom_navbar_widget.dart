@@ -24,7 +24,7 @@ class BottomNavBar extends StatelessWidget {
             color: Colors.grey.withOpacity(0.8),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: const Offset(1, 3), // changes position of shadow
+            offset: const Offset(0, 1), // changes position of shadow
           ),
         ],
         color: ColorConstants.primaryBackgroundColor,
@@ -48,14 +48,9 @@ class BottomNavBar extends StatelessWidget {
             borderSide: const BorderSide(
                 color: ColorConstants.secondaryBackgroundColor),
           ),
-          LccButtonWidget(
-            onPressFunction: selectFromCamera,
-            buttonColor: ColorConstants.primaryGreen,
-            buttonIcon: LccIcons.leafIcon,
-            borderSide: const BorderSide(
-                width: 0.70,
-                color: ColorConstants.secondaryGreen,
-                strokeAlign: 15),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: CaptureImageButton(selectFromCamera: selectFromCamera),
           ),
           LccButtonWidget(
             onPressFunction: restartProgress,
@@ -71,6 +66,26 @@ class BottomNavBar extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CaptureImageButton extends StatelessWidget {
+  const CaptureImageButton({
+    super.key,
+    required this.selectFromCamera,
+  });
+
+  final OnPressCallBackFunction selectFromCamera;
+
+  @override
+  Widget build(BuildContext context) {
+    return LccButtonWidget(
+      onPressFunction: selectFromCamera,
+      buttonColor: ColorConstants.primaryGreen,
+      buttonIcon: LccIcons.leafIcon,
+      borderSide: const BorderSide(
+          width: 0.70, color: ColorConstants.secondaryGreen, strokeAlign: 15),
     );
   }
 }
