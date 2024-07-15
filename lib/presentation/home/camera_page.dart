@@ -54,7 +54,7 @@ class CameraPage extends ConsumerWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ImagePreviewPage(
-                imageBytes: imageBytes,
+                imageBytes: imageBytes.$2,
               ),
             ),
           );
