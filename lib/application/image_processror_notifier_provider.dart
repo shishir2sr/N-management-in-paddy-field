@@ -26,29 +26,36 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return ImageProcessorState.initial();
   }
 
-  void captureImage({required CameraController controller}) async {
+  Future<Uint8List?> captureImage(
+      {required CameraController controller}) async {
     state = const AsyncLoading();
-
     final repo = ref.watch(imageProcessingRepositoryProvider);
-
     final result = await repo.takePicture(controller: controller);
+    Uint8List? image;
 
     // fold the result
     result.fold(
       (imageBytes) {
-        state = AsyncData(
-          ImageProcessorState(
-            imageBytes: [...state.value!.imageBytes, imageBytes],
-          ),
-        );
+        return image = imageBytes;
       },
       (failure) {
         state = AsyncError(failure.msg, StackTrace.current);
+        return image = null;
       },
+    );
+    return image;
+  }
+
+  void updateImageList(Uint8List imageBytes) {
+    state = AsyncData(
+      ImageProcessorState(
+        imageBytes: [...state.value!.imageBytes, imageBytes],
+      ),
     );
   }
 }
 
 final imageProcessorProvider =
     AsyncNotifierProvider<ImageProcessorNotifier, ImageProcessorState>(
-        ImageProcessorNotifier.new);
+  ImageProcessorNotifier.new,
+);

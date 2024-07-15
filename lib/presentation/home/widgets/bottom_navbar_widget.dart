@@ -36,36 +36,48 @@ class BottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          LccButtonWidget(
-            onPressFunction: selectFromGallery,
-            buttonColor: ColorConstants.secondaryBackgroundColor,
-            buttonIcon: Icon(
-              Icons.photo_library_outlined,
-              color: ColorConstants.primaryGreen.withOpacity(0.8),
-              size: 26,
-              weight: FontWeight.bold.value.toDouble(),
-            ),
-            borderSide: const BorderSide(
-                color: ColorConstants.secondaryBackgroundColor),
-          ),
+          SecondaryLccButtonWidget(
+              onPressed: selectFromGallery, icon: Icons.photo_library_outlined),
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: CaptureImageButton(selectFromCamera: selectFromCamera),
           ),
-          LccButtonWidget(
-            onPressFunction: restartProgress,
-            buttonColor: ColorConstants.secondaryBackgroundColor,
-            buttonIcon: Icon(
-              Icons.restart_alt_outlined,
-              color: ColorConstants.primaryGreen.withOpacity(0.8),
-              size: 30,
-              weight: FontWeight.bold.value.toDouble(),
-            ),
-            borderSide: const BorderSide(
-                color: ColorConstants.secondaryBackgroundColor),
+          SecondaryLccButtonWidget(
+            onPressed: restartProgress,
+            icon: Icons.restart_alt_outlined,
           ),
         ],
       ),
+    );
+  }
+}
+
+class SecondaryLccButtonWidget extends StatelessWidget {
+  const SecondaryLccButtonWidget({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+    this.iconColor = ColorConstants.primaryGreen,
+  });
+  final IconData icon;
+
+  final OnPressCallBackFunction onPressed;
+
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return LccButtonWidget(
+      onPressFunction: onPressed,
+      buttonColor: ColorConstants.secondaryBackgroundColor,
+      buttonIcon: Icon(
+        icon,
+        color: iconColor.withOpacity(0.8),
+        size: 26,
+        weight: FontWeight.bold.value.toDouble(),
+      ),
+      borderSide:
+          const BorderSide(color: ColorConstants.secondaryBackgroundColor),
     );
   }
 }

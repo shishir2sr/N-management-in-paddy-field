@@ -18,12 +18,9 @@ class CameraPreviewWidget extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (controller != null)
-            Expanded(
-              flex: 7,
-              child: Center(
-                child: CameraPreview(
-                  controller!,
-                ),
+            Center(
+              child: CameraPreview(
+                controller!,
               ),
             ),
         ],

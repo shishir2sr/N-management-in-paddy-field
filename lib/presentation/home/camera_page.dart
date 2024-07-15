@@ -5,6 +5,7 @@ import 'package:rice_fertile_ai/application/image_processror_notifier_provider.d
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
+import 'package:rice_fertile_ai/presentation/home/image_preview_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/camera_preview_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/camera_screen_bottom_bar_widget.dart';
 
@@ -42,11 +43,23 @@ class CameraPage extends ConsumerWidget {
           title: "Capture Paddy Image",
           backgroundColor: Colors.black,
           iconTheme: const IconThemeData(color: Colors.white)),
-      bottomNavigationBar: CameraScreenBottomBarWidget(
-        onImageCapture: () => ref
+      bottomNavigationBar:
+          CameraScreenBottomBarWidget(onImageCapture: () async {
+        final imageBytes = await ref
             .read(imageProcessorProvider.notifier)
-            .captureImage(controller: cameraController.value!),
-      ),
+            .captureImage(controller: cameraController.value!);
+
+        if (imageBytes != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImagePreviewPage(
+                imageBytes: imageBytes,
+              ),
+            ),
+          );
+        }
+      }),
       body: cameraController.maybeMap(
         orElse: () => const Text('Camera controller not initialized'),
         loading: (_) => const Center(

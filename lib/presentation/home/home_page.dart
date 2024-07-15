@@ -10,7 +10,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(imageProcessorProvider);
+    final data = ref.watch(imageProcessorProvider).value?.imageBytes;
     return SafeArea(
       top: false,
       bottom: false,
@@ -38,11 +38,7 @@ class HomePage extends ConsumerWidget {
               const Text(
                 'Welcome to Rice Fertile AI',
               ),
-              data.maybeMap(
-                  orElse: () => Container(),
-                  data: (data) {
-                    return Text('Image Bytes: ${data.value.imageBytes.length}');
-                  }),
+              Text('Image Bytes: ${data?.length ?? 0}'),
             ],
           ),
         ),

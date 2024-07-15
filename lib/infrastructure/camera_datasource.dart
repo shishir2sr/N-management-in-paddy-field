@@ -69,7 +69,7 @@ final cameraControllerProviderProvider =
       controller = await cameraDataSource.initializeController();
       // Dispose the controller when the provider is disposed
       ref.onDispose(() async {
-        logger.i('Disposing camera controller');
+        logger.i('Disposing camera controller ');
         await controller?.dispose();
       });
       return controller;
