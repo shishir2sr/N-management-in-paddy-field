@@ -27,10 +27,12 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return ImageProcessorState.initial();
   }
 
-  Future<SegmentationResult?> captureImage({
+  Future<Uint8List?> captureImage({
     required CameraController controller,
     required Interpreter interpreter,
   }) async {
+    Uint8List? image;
+
     state = const AsyncLoading();
     final repo = ref.watch(imageProcessingRepositoryProvider);
 
@@ -38,19 +40,32 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
       controller: controller,
       interpreter: interpreter,
     );
-    SegmentationResult? images;
 
     // fold the result
     result.fold(
-      (segmentationResult) {
-        images = segmentationResult;
+      (imageBytes) {
+        image = imageBytes;
       },
       (failure) {
         state = AsyncError(failure.msg, StackTrace.current);
-        images = null;
+        image = null;
       },
     );
-    return images;
+    return image;
+  }
+
+  Future<SegmentationResult> removeBackgroundFromImage({
+    required Uint8List imageBytes,
+    required Interpreter interpreter,
+  }) async {
+    state = const AsyncLoading();
+    final repo = ref.watch(imageProcessingRepositoryProvider);
+    final result = await repo.removeBackgroundFromImage(
+      imageBytes: imageBytes,
+      interpreter: interpreter,
+    );
+    state = AsyncData(state.value!);
+    return result;
   }
 
   void updateImageList(Uint8List imageBytes) {

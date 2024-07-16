@@ -15,25 +15,26 @@ import 'package:image/image.dart' as img;
 class InputImageRepository {
   final CameraDataSource _cameraService;
   final ModelRunner _tfliteModelRunner;
-  final ImageProcessingService _imageProcessingService;
+  final ImageProcessingService _imgProcessor;
 
-  InputImageRepository(this._cameraService, this._tfliteModelRunner,
-      this._imageProcessingService);
+  InputImageRepository(
+    this._cameraService,
+    this._tfliteModelRunner,
+    this._imgProcessor,
+  );
 
-  Future<Either<SegmentationResult, CameraFailure>> takePicture(
+  Future<Either<Uint8List, CameraFailure>> takePicture(
       {required CameraController controller,
       required Interpreter interpreter}) async {
     try {
+      // * Take picture from camera
       final XFile xFileImage =
           await _cameraService.takePicture(controller: controller);
-      xFileImage.readAsBytes();
+
       logger.i('[Repository] Returning image bytes');
       final Uint8List imageBytes = await xFileImage.readAsBytes();
-      final SegmentationResult segmentationResult =
-          await removeBackgroundFromImage(
-              imageBytes: imageBytes, interpreter: interpreter);
 
-      return left(segmentationResult);
+      return left(imageBytes);
     } on CameraException catch (e) {
       return right(
           CameraFailure.cameraException(e.description ?? 'Unknown Error!'));
@@ -42,25 +43,35 @@ class InputImageRepository {
     }
   }
 
-  Future<SegmentationResult> removeBackgroundFromImage(
-      {required Uint8List imageBytes, required Interpreter interpreter}) async {
-    final resizedImage =
-        _imageProcessingService.getReshapedImage(imageData: imageBytes);
-    final resizedImageBytes = Uint8List.fromList(img.encodePng(resizedImage));
+  Future<SegmentationResult> removeBackgroundFromImage({
+    required Uint8List imageBytes,
+    required Interpreter interpreter,
+  }) async {
+    // * Prepare Input Tensor
+    final imageReshaped = _imgProcessor.getReshapedImage(imageData: imageBytes);
+    final imageReshapedBytes = Uint8List.fromList(img.encodePng(imageReshaped));
+    final inputTensor = _imgProcessor.getInputTensor(image: imageReshaped);
 
-    final inputTensor =
-        _imageProcessingService.getInputTensor(image: resizedImage);
+    // * Prepare Output Tesnsor
+    final outputTensor = _imgProcessor.getOutputTensor();
 
-    final outputTensor = _imageProcessingService.getOutputTensor();
-
+    // * Run PreProcessor Model
     final segmentationTensor = await _tfliteModelRunner.runPreProcessorModel(
-        interpreter: interpreter, input: inputTensor, output: outputTensor);
+      interpreter: interpreter,
+      input: inputTensor,
+      output: outputTensor,
+    );
 
-    final outputImage = _imageProcessingService.getOutputImage(
-        originalImage: resizedImage, outputTensor: segmentationTensor!);
+    // * Apply Segmentation Mask
+    final outputImage = _imgProcessor.applySegmentationMask(
+      originalImage: imageReshaped,
+      outputTensor: segmentationTensor!,
+    );
 
     return SegmentationResult(
-        originalImage: resizedImageBytes, outputImage: outputImage);
+      originalImage: imageReshapedBytes,
+      outputImage: outputImage,
+    );
   }
 }
 

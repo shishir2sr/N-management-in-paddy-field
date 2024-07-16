@@ -41,7 +41,7 @@ abstract class ImageProcessingService {
   /// Uint8List outputImage = imageProcessingService.getOutputImage();
   /// ```
 
-  Uint8List getOutputImage(
+  Uint8List applySegmentationMask(
       {required img.Image originalImage, required Tensor4D outputTensor});
 
   /// Returns the output tensor of the image processing service.
@@ -98,7 +98,7 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
   }
 
   @override
-  Uint8List getOutputImage(
+  Uint8List applySegmentationMask(
       {required img.Image originalImage, required Tensor4D outputTensor}) {
     int width = originalImage.width;
     int height = originalImage.height;

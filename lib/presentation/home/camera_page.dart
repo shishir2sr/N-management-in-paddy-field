@@ -52,19 +52,23 @@ class CameraPage extends ConsumerWidget {
             interpreter.isLoading ? Colors.grey : ColorConstants.primaryGreen,
         onImageCapture: !interpreter.isLoading
             ? () async {
-                final segmentationResult = await ref
-                    .read(imageProcessorProvider.notifier)
-                    .captureImage(
-                      controller: cameraController.value!,
-                      interpreter: interpreter.asData!.value,
-                    );
+                final notifier = ref.read(imageProcessorProvider.notifier);
+                final cameraImage = await notifier.captureImage(
+                  controller: cameraController.value!,
+                  interpreter: interpreter.asData!.value,
+                );
 
-                if (segmentationResult != null) {
+                final segmentedImage = await notifier.removeBackgroundFromImage(
+                  imageBytes: cameraImage!,
+                  interpreter: interpreter.asData!.value,
+                );
+
+                if (context.mounted) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ImagePreviewPage(
-                        imageBytes: segmentationResult.outputImage,
+                        imageBytes: segmentedImage.outputImage,
                       ),
                     ),
                   );
