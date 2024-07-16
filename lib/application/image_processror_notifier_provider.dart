@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/infrastructure/input_image_repository.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 part 'image_processror_notifier_provider.freezed.dart';
@@ -26,7 +27,7 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return ImageProcessorState.initial();
   }
 
-  Future<(Uint8List, Uint8List)?> captureImage({
+  Future<SegmentationResult?> captureImage({
     required CameraController controller,
     required Interpreter interpreter,
   }) async {
@@ -37,12 +38,12 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
       controller: controller,
       interpreter: interpreter,
     );
-    (Uint8List, Uint8List)? images;
+    SegmentationResult? images;
 
     // fold the result
     result.fold(
-      (inputAndOutputImage) {
-        images = inputAndOutputImage;
+      (segmentationResult) {
+        images = segmentationResult;
       },
       (failure) {
         state = AsyncError(failure.msg, StackTrace.current);

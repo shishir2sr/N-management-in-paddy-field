@@ -5,6 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/domain/camera_failure.dart';
+import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
 import 'package:rice_fertile_ai/infrastructure/image_processing_service.dart';
 import 'package:rice_fertile_ai/infrastructure/tflite_service.dart';
@@ -19,7 +20,7 @@ class InputImageRepository {
   InputImageRepository(this._cameraService, this._tfliteModelRunner,
       this._imageProcessingService);
 
-  Future<Either<(Uint8List, Uint8List), CameraFailure>> takePicture(
+  Future<Either<SegmentationResult, CameraFailure>> takePicture(
       {required CameraController controller,
       required Interpreter interpreter}) async {
     try {
@@ -28,10 +29,11 @@ class InputImageRepository {
       xFileImage.readAsBytes();
       logger.i('[Repository] Returning image bytes');
       final Uint8List imageBytes = await xFileImage.readAsBytes();
-      final inputAndOutputImage = await removeBackground(
-          imageBytes: imageBytes, interpreter: interpreter);
+      final SegmentationResult segmentationResult =
+          await removeBackgroundFromImage(
+              imageBytes: imageBytes, interpreter: interpreter);
 
-      return left(inputAndOutputImage);
+      return left(segmentationResult);
     } on CameraException catch (e) {
       return right(
           CameraFailure.cameraException(e.description ?? 'Unknown Error!'));
@@ -40,7 +42,7 @@ class InputImageRepository {
     }
   }
 
-  Future<(Uint8List, Uint8List)> removeBackground(
+  Future<SegmentationResult> removeBackgroundFromImage(
       {required Uint8List imageBytes, required Interpreter interpreter}) async {
     final resizedImage =
         _imageProcessingService.getReshapedImage(imageData: imageBytes);
@@ -57,7 +59,8 @@ class InputImageRepository {
     final outputImage = _imageProcessingService.getOutputImage(
         originalImage: resizedImage, outputTensor: segmentationTensor!);
 
-    return (resizedImageBytes, outputImage);
+    return SegmentationResult(
+        originalImage: resizedImageBytes, outputImage: outputImage);
   }
 }
 
