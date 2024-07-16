@@ -88,9 +88,9 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         var pixel = image.getPixel(x, y);
-        tensor[0][y][x][0] = (img.getRed(pixel) / 255.0); // Normalize Red
-        tensor[0][y][x][1] = (img.getGreen(pixel) / 255.0); // Normalize Green
-        tensor[0][y][x][2] = (img.getBlue(pixel) / 255.0); // Normalize Blue
+        tensor[0][y][x][0] = (pixel.r / 255.0); // Normalize Red
+        tensor[0][y][x][1] = (pixel.g / 255.0); // Normalize Green
+        tensor[0][y][x][2] = (pixel.b / 255.0); // Normalize Blue
       }
     }
 
@@ -103,7 +103,6 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
     int width = originalImage.width;
     int height = originalImage.height;
 
-    // Assuming the tensor's dimensions match the image's dimensions
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         // Determine if the current pixel is part of the foreground
