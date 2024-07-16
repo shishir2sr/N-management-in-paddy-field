@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
@@ -7,7 +5,6 @@ import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/domain/image_type.dart';
 import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/image_preview_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/image_selection_widget.dart';
 
@@ -28,7 +25,7 @@ class ImagePreviewPage extends ConsumerWidget {
         ImageSelectionPlaceholderWidget(
           onSelectImage: () {
             final notifier = ref.read(imageProcessorProvider.notifier);
-            notifier.updateImageList(segmentationResult.outputImage);
+            notifier.updateImageList(segmentationResult);
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
           onRetakeImage: () {
@@ -44,7 +41,7 @@ class ImagePreviewPage extends ConsumerWidget {
             width: double.infinity,
             decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.grey,
+                  color: ColorConstants.secondaryGreen,
                   width: 0.3,
                 ),
                 shape: BoxShape.rectangle),

@@ -107,7 +107,7 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         // Determine if the current pixel is part of the foreground
-        bool isForeground = outputTensor[0][y][x][0] > 0.5;
+        bool isForeground = outputTensor[0][y][x][0] > 0.6;
 
         // If the pixel is not part of the foreground, set its alpha to 0
         if (!isForeground) {

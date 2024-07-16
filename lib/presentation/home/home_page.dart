@@ -10,7 +10,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(imageProcessorProvider).value?.imageBytes;
+    final data = ref.watch(imageProcessorProvider).value?.originalImage;
     return SafeArea(
       top: false,
       bottom: false,

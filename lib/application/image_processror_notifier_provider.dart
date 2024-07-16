@@ -11,11 +11,13 @@ part 'image_processror_notifier_provider.freezed.dart';
 @freezed
 class ImageProcessorState with _$ImageProcessorState {
   const factory ImageProcessorState({
-    required List<Uint8List> imageBytes,
+    required List<Uint8List> originalImage,
+    required List<Uint8List> processedImages,
   }) = _ImageProcessorState;
 
   factory ImageProcessorState.initial() => const ImageProcessorState(
-        imageBytes: [],
+        originalImage: [],
+        processedImages: [],
       );
 }
 
@@ -68,10 +70,17 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return result;
   }
 
-  void updateImageList(Uint8List imageBytes) {
+  void updateImageList(SegmentationResult segmentationResult) {
     state = AsyncData(
       ImageProcessorState(
-        imageBytes: [...state.value!.imageBytes, imageBytes],
+        originalImage: [
+          ...state.value!.originalImage,
+          segmentationResult.originalImage
+        ],
+        processedImages: [
+          ...state.value!.processedImages,
+          segmentationResult.outputImage
+        ],
       ),
     );
   }
