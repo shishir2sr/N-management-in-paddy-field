@@ -54,9 +54,8 @@ class TFLiteService implements InterpreterManager, ModelRunner {
   }) async {
     var inputTensor = input;
     var outputTensor = output;
-    logger.i('output before: $outputTensor');
+
     interpreter.run(inputTensor, outputTensor);
-    logger.i('output after: $outputTensor');
     return outputTensor;
   }
 }
@@ -66,11 +65,13 @@ final interpreterManagerProvider =
     Provider<InterpreterManager>((ref) => TFLiteService());
 
 // create a future family autodispose provider to create interpreter for each model
-final interpreterProvider = FutureProvider.family<Interpreter, String>(
+final interpreterProvider =
+    FutureProvider.autoDispose.family<Interpreter, String>(
   (ref, assetPath) async {
     ref.onDispose(() {
       logger.i('Disposing interpreter');
     });
+
     final interpreterManager = ref.watch(interpreterManagerProvider);
     return interpreterManager.createInterpreter(assetPath: assetPath);
   },

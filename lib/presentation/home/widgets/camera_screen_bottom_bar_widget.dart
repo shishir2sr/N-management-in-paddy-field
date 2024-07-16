@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
 
 class CameraScreenBottomBarWidget extends StatelessWidget {
   const CameraScreenBottomBarWidget({
     super.key,
     required this.onImageCapture,
+    this.iconColor = ColorConstants.primaryGreen,
   });
 
   final Function() onImageCapture;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +20,7 @@ class CameraScreenBottomBarWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30),
         child: CaptureImageButton(
+          iconColor: iconColor,
           selectFromCamera: onImageCapture,
         ),
       ),

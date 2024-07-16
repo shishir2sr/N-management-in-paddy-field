@@ -86,15 +86,17 @@ class CaptureImageButton extends StatelessWidget {
   const CaptureImageButton({
     super.key,
     required this.selectFromCamera,
+    this.iconColor = ColorConstants.primaryGreen,
   });
 
   final OnPressCallBackFunction selectFromCamera;
+  final Color iconColor;
 
   @override
   Widget build(BuildContext context) {
     return LccButtonWidget(
       onPressFunction: selectFromCamera,
-      buttonColor: ColorConstants.primaryGreen,
+      buttonColor: iconColor,
       buttonIcon: LccIcons.leafIcon,
       borderSide: const BorderSide(
           width: 0.70, color: ColorConstants.secondaryGreen, strokeAlign: 15),
