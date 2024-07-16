@@ -17,8 +17,9 @@ class CameraPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cameraController = ref.watch(cameraControllerProviderProvider);
-    final interpreter =
-        ref.watch(interpreterProvider(StringConstants.segmentationModelPath));
+    final interpreter = ref.watch(interpreterProvider(
+      StringConstants.segmentationModelPath,
+    ));
     // listen to the controller initialization error
     ref.listen(cameraControllerProviderProvider, (state, next) {
       if (state == null) {
@@ -58,7 +59,8 @@ class CameraPage extends ConsumerWidget {
                   interpreter: interpreter.asData!.value,
                 );
 
-                final segmentedImage = await notifier.removeBackgroundFromImage(
+                final segmentationResult =
+                    await notifier.removeBackgroundFromImage(
                   imageBytes: cameraImage!,
                   interpreter: interpreter.asData!.value,
                 );
@@ -68,7 +70,7 @@ class CameraPage extends ConsumerWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ImagePreviewPage(
-                        imageBytes: segmentedImage.outputImage,
+                        segmentationResult: segmentationResult,
                       ),
                     ),
                   );
@@ -76,21 +78,26 @@ class CameraPage extends ConsumerWidget {
               }
             : () {},
       ),
-      body: !interpreter.isLoading
-          ? cameraController.maybeMap(
-              orElse: () => const Text('Camera controller not initialized'),
-              loading: (_) => const Center(
-                child: CupertinoActivityIndicator(
-                  color: ColorConstants.secondaryGreen,
+      body: interpreter.when(
+          data: (interpreter) => cameraController.maybeMap(
+                orElse: () => const Center(
+                  child: Text('Camera controller not initialized'),
                 ),
+                loading: (_) => const Center(
+                  child: CupertinoActivityIndicator(
+                    color: ColorConstants.secondaryGreen,
+                  ),
+                ),
+                data: (controller) {
+                  return CameraPreviewWidget(
+                    controller: controller.value,
+                  );
+                },
               ),
-              data: (controller) {
-                return CameraPreviewWidget(
-                  controller: controller.value,
-                );
-              },
-            )
-          : const CupertinoActivityIndicator(),
+          error: (error, stacktrace) => Center(
+                child: Text("Interpreter Error: ${error.toString()}"),
+              ),
+          loading: () => const Center(child: CupertinoActivityIndicator())),
     );
   }
 }

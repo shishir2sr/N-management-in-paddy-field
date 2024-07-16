@@ -2,13 +2,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
+import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
 
 class ImagePreviewPage extends ConsumerWidget {
-  final Uint8List imageBytes;
+  final SegmentationResult segmentationResult;
 
-  const ImagePreviewPage({super.key, required this.imageBytes});
+  const ImagePreviewPage({super.key, required this.segmentationResult});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,7 +23,7 @@ class ImagePreviewPage extends ConsumerWidget {
           onSelectImage: () {
             ref
                 .read(imageProcessorProvider.notifier)
-                .updateImageList(imageBytes);
+                .updateImageList(segmentationResult.outputImage);
             Navigator.of(context).popUntil((route) => route.isFirst);
           },
           onRetakeImage: () {
@@ -35,7 +36,7 @@ class ImagePreviewPage extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Center(child: Image.memory(imageBytes)),
+            Center(child: Image.memory(segmentationResult.outputImage)),
           ],
         ),
       ),
