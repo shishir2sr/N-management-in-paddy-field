@@ -21,15 +21,16 @@ class InputImageRepository {
 
   Future<Either<(Uint8List, Uint8List), CameraFailure>> takePicture(
       {required CameraController controller,
-      required IsolateInterpreter interpreter}) async {
+      required Interpreter interpreter}) async {
     try {
       final XFile xFileImage =
           await _cameraService.takePicture(controller: controller);
       xFileImage.readAsBytes();
       logger.i('[Repository] Returning image bytes');
       final Uint8List imageBytes = await xFileImage.readAsBytes();
-      final inputAndOutputImage =
-          removeBackground(imageBytes: imageBytes, interpreter: interpreter);
+      final inputAndOutputImage = await removeBackground(
+          imageBytes: imageBytes, interpreter: interpreter);
+
       return left(inputAndOutputImage);
     } on CameraException catch (e) {
       return right(
@@ -39,17 +40,20 @@ class InputImageRepository {
     }
   }
 
-  (Uint8List, Uint8List) removeBackground(
-      {required Uint8List imageBytes,
-      required IsolateInterpreter interpreter}) {
+  Future<(Uint8List, Uint8List)> removeBackground(
+      {required Uint8List imageBytes, required Interpreter interpreter}) async {
     final resizedImage =
         _imageProcessingService.getReshapedImage(imageData: imageBytes);
     final resizedImageBytes = Uint8List.fromList(img.encodePng(resizedImage));
+
     final inputTensor =
         _imageProcessingService.getInputTensor(image: resizedImage);
+
     final outputTensor = _imageProcessingService.getOutputTensor();
-    final segmentationTensor = _tfliteModelRunner.runPreProcessorModel(
+
+    final segmentationTensor = await _tfliteModelRunner.runPreProcessorModel(
         interpreter: interpreter, input: inputTensor, output: outputTensor);
+
     final outputImage = _imageProcessingService.getOutputImage(
         originalImage: resizedImage, outputTensor: segmentationTensor!);
 

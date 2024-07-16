@@ -6,19 +6,19 @@ import 'package:rice_fertile_ai/domain/tensor4d.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 abstract class InterpreterManager {
-  Future<IsolateInterpreter> createInterpreter({required String assetPath});
-  void closeInterpreter({required IsolateInterpreter interpreter});
+  Future<Interpreter> createInterpreter({required String assetPath});
+  void closeInterpreter({required Interpreter interpreter});
 }
 
 abstract class ModelRunner {
-  Tensor4D? runPreProcessorModel({
-    required IsolateInterpreter interpreter,
+  Future<Tensor4D?> runPreProcessorModel({
+    required Interpreter interpreter,
     required Tensor4D input,
     required Tensor4D output,
   });
 
   Future<dynamic> runClassificatinModel({
-    required IsolateInterpreter interpreter,
+    required Interpreter interpreter,
     required Uint8List input,
   });
 }
@@ -26,35 +26,38 @@ abstract class ModelRunner {
 // New TFLite service class implementing both interfaces
 class TFLiteService implements InterpreterManager, ModelRunner {
   @override
-  Future<IsolateInterpreter> createInterpreter(
-      {required String assetPath}) async {
+  Future<Interpreter> createInterpreter({required String assetPath}) async {
     final interpreter = await Interpreter.fromAsset(assetPath);
-    final isolateInterpreter =
-        await IsolateInterpreter.create(address: interpreter.address);
+
     logger.i('Interpreter created');
-    return isolateInterpreter;
+    return interpreter;
   }
 
   @override
-  void closeInterpreter({required IsolateInterpreter interpreter}) {
+  void closeInterpreter({required Interpreter interpreter}) {
     interpreter.close();
     logger.i('Interpreter closed');
   }
 
   @override
   Future runClassificatinModel(
-      {required IsolateInterpreter interpreter, required Uint8List input}) {
+      {required Interpreter interpreter, required Uint8List input}) {
     // TODO: implement runClassificatinModel
     throw UnimplementedError();
   }
 
   @override
-  Tensor4D? runPreProcessorModel(
-      {required IsolateInterpreter interpreter,
-      required Tensor4D input,
-      required Tensor4D output}) {
-    interpreter.run(input, output);
-    return output;
+  Future<Tensor4D?> runPreProcessorModel({
+    required Interpreter interpreter,
+    required Tensor4D input,
+    required Tensor4D output,
+  }) async {
+    var inputTensor = input;
+    var outputTensor = output;
+    logger.i('output before: $outputTensor');
+    interpreter.run(inputTensor, outputTensor);
+    logger.i('output after: $outputTensor');
+    return outputTensor;
   }
 }
 
@@ -63,7 +66,7 @@ final interpreterManagerProvider =
     Provider<InterpreterManager>((ref) => TFLiteService());
 
 // create a future family autodispose provider to create interpreter for each model
-final interpreterProvider = FutureProvider.family<IsolateInterpreter, String>(
+final interpreterProvider = FutureProvider.family<Interpreter, String>(
   (ref, assetPath) async {
     ref.onDispose(() {
       logger.i('Disposing interpreter');
