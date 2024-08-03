@@ -5,4 +5,9 @@ class ColorConstants {
   static const Color secondaryBackgroundColor = Color(0xffF5FAF4);
   static const Color primaryGreen = Color(0xff349668);
   static const Color secondaryGreen = Color.fromARGB(255, 47, 163, 109);
+  static const LinearGradient appGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [primaryGreen, secondaryGreen],
+  );
 }
