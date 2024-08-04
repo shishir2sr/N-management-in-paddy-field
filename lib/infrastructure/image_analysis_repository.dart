@@ -22,7 +22,7 @@ class ImageAnalysisRepository {
     this._imgProcessor,
   );
 
-  Future<Either<Uint8List, CameraFailure>> takePicture(
+  Future<Either<CameraFailure, Uint8List>> takePicture(
       {required CameraController controller,
       required Interpreter interpreter}) async {
     try {
@@ -33,12 +33,12 @@ class ImageAnalysisRepository {
       logger.i('[Repository] Returning image bytes');
       final Uint8List imageBytes = await xFileImage.readAsBytes();
 
-      return left(imageBytes);
+      return right(imageBytes);
     } on CameraException catch (e) {
-      return right(
+      return left(
           CameraFailure.cameraException(e.description ?? 'Unknown Error!'));
     } on CameraInitializationException catch (e) {
-      return right(CameraFailure.cameraException(e.message));
+      return left(CameraFailure.cameraException(e.message));
     }
   }
 
@@ -46,31 +46,37 @@ class ImageAnalysisRepository {
     required Uint8List imageBytes,
     required Interpreter interpreter,
   }) async {
-    // * Prepare Input Tensor
-    final imageReshaped = _imgProcessor.getReshapedImage(imageData: imageBytes);
-    final imageReshapedBytes = Uint8List.fromList(
-        img.encodePng(imageReshaped)); // this will return as original image
-    final inputTensor = _imgProcessor.getInputTensor(image: imageReshaped);
+    try {
+      // * Prepare Input Tensor
+      final imageReshaped =
+          _imgProcessor.getReshapedImage(imageData: imageBytes);
+      final imageReshapedBytes = Uint8List.fromList(
+          img.encodePng(imageReshaped)); // this will return as original image
+      final inputTensor = _imgProcessor.getInputTensor(image: imageReshaped);
 
-    // * Prepare Output Tesnsor
-    final outputTensor = _imgProcessor.getSegmentationModelsOutputTensor();
+      // * Prepare Output Tesnsor
+      final outputTensor = _imgProcessor.getSegmentationModelsOutputTensor();
 
-    // * Run PreProcessor Model
-    final segmentationTensor = await _tfliteModelRunner.runPreProcessorModel(
-      interpreter: interpreter,
-      input: inputTensor,
-      output: outputTensor,
-    );
+      // * Run PreProcessor Model
+      final segmentationTensor = await _tfliteModelRunner.runPreProcessorModel(
+        interpreter: interpreter,
+        input: inputTensor,
+        output: outputTensor,
+      );
 
-    // * Apply Segmentation Mask
-    final outputImage = _imgProcessor.applySegmentationMask(
-      originalImage: imageReshaped,
-      outputTensor: segmentationTensor!,
-    );
-    return SegmentationResult(
-      originalImage: imageReshapedBytes,
-      outputImage: outputImage,
-    );
+      // * Apply Segmentation Mask
+      final outputImage = _imgProcessor.applySegmentationMask(
+        originalImage: imageReshaped,
+        outputTensor: segmentationTensor!,
+      );
+      return SegmentationResult(
+        originalImage: imageReshapedBytes,
+        outputImage: outputImage,
+      );
+    } catch (e) {
+      logger.e('Error removing background: $e');
+      throw Exception('Error removing background');
+    }
   }
 
   // * test classification model
@@ -87,7 +93,7 @@ class ImageAnalysisRepository {
       [0.0, 0.0, 0.0, 0.0]
     ];
     // * Run classification model
-    await _tfliteModelRunner.runClassificatinModel(
+    _tfliteModelRunner.runClassificatinModel(
       interpreter: interpreter,
       input: inputTensor,
       output: outputTensor,

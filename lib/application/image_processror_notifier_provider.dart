@@ -47,12 +47,12 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
 
     // fold the result
     result.fold(
-      (imageBytes) {
-        image = imageBytes;
-      },
       (failure) {
         state = AsyncError(failure.msg, StackTrace.current);
         image = null;
+      },
+      (imageBytes) {
+        image = imageBytes;
       },
     );
     return image;

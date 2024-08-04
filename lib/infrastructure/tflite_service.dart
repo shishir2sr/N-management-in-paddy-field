@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/domain/tensor4d.dart';
+import 'package:rice_fertile_ai/domain/typedefs.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 abstract class InterpreterManager {
@@ -15,7 +15,7 @@ abstract class ModelRunner {
     required Tensor4D output,
   });
 
-  Future<dynamic> runClassificatinModel({
+  Tensor2D runClassificatinModel({
     required Interpreter interpreter,
     required Tensor4D input,
     required List<List<double>> output,
@@ -43,16 +43,16 @@ class TFLiteService implements InterpreterManager, ModelRunner {
   }
 
   @override
-  Future runClassificatinModel({
+  Tensor2D runClassificatinModel({
     required Interpreter interpreter,
     required Tensor4D input,
-    required List<List<double>> output,
+    required Tensor2D output,
   }) {
     final modelInput = input;
     final modelOutput = output;
     interpreter.run(modelInput, modelOutput);
     logger.i('Model output: $modelOutput');
-    return Future.value(0);
+    return modelOutput;
   }
 
   @override

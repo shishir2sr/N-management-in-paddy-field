@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
-import 'package:rice_fertile_ai/domain/tensor4d.dart';
+import 'package:rice_fertile_ai/domain/typedefs.dart';
 
 abstract class ImageProcessingService {
   /// Reshapes the provided image data and returns the reshaped image as an [img.Image] object.
@@ -75,7 +75,10 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
     int height = 256,
   }) {
     img.Image? image = img.decodeImage(Uint8List.fromList(imageData));
-    return img.copyResize(image!, width: width, height: height);
+    if (image == null) {
+      throw Exception('Error decoding image');
+    }
+    return img.copyResize(image, width: width, height: height);
   }
 
   @override
