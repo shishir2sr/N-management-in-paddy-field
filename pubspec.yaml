@@ -47,6 +47,7 @@ flutter:
   assets:
     - assets/tflite/
     - assets/icons/
+    - assets/images/
   # fonts:
   #   - family: Schyler
   #     fonts:

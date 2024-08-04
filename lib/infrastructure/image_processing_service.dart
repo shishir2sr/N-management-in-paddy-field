@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
@@ -16,7 +17,8 @@ abstract class ImageProcessingService {
   /// img.Image reshapedImage = getReshapedImage(imageData: imageData);
   /// // use the reshapedImage for further processing or display
   /// ```
-  img.Image getReshapedImage({required Uint8List imageData});
+  img.Image getReshapedImage(
+      {required Uint8List imageData, int width = 256, int height = 256});
 
   /// Returns the input tensor for image processing.
   ///
@@ -26,8 +28,7 @@ abstract class ImageProcessingService {
   ///
   /// Returns:
   ///   A Tensor4D object representing the input tensor for image processing.
-  Tensor4D getInputTensor(
-      {required img.Image image, int width = 256, int height = 256});
+  Tensor4D getInputTensor({required img.Image image, int width, int height});
 
   /// Retrieves the output image as a Uint8List.
   ///
@@ -61,19 +62,28 @@ abstract class ImageProcessingService {
   /// See also:
   ///   - [Tensor4D] class
   ///
-  Tensor4D getOutputTensor();
+  Tensor4D getSegmentationModelsOutputTensor();
+
+  List<List<double>> getClassificationModelsOutputTensor();
 }
 
 class ImageProcessingServiceImpl implements ImageProcessingService {
   @override
-  img.Image getReshapedImage({required Uint8List imageData}) {
+  img.Image getReshapedImage({
+    required Uint8List imageData,
+    int width = 256,
+    int height = 256,
+  }) {
     img.Image? image = img.decodeImage(Uint8List.fromList(imageData));
-    return img.copyResize(image!, width: 256, height: 256);
+    return img.copyResize(image!, width: width, height: height);
   }
 
   @override
-  Tensor4D getInputTensor(
-      {required img.Image image, int width = 256, int height = 256}) {
+  Tensor4D getInputTensor({
+    required img.Image image,
+    int width = 256,
+    int height = 256,
+  }) {
     Tensor4D tensor = List.generate(
       1,
       (_) => List.generate(
@@ -121,7 +131,7 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
   }
 
   @override
-  Tensor4D getOutputTensor() {
+  Tensor4D getSegmentationModelsOutputTensor() {
     return List.generate(
       1,
       (_) => List.generate(
@@ -132,6 +142,11 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
         ),
       ),
     );
+  }
+
+  @override
+  List<List<double>> getClassificationModelsOutputTensor() {
+    return List.generate(1, (_) => List.filled(4, 0.0));
   }
 }
 

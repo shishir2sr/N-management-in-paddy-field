@@ -53,7 +53,7 @@ class InputImageRepository {
     final inputTensor = _imgProcessor.getInputTensor(image: imageReshaped);
 
     // * Prepare Output Tesnsor
-    final outputTensor = _imgProcessor.getOutputTensor();
+    final outputTensor = _imgProcessor.getSegmentationModelsOutputTensor();
 
     // * Run PreProcessor Model
     final segmentationTensor = await _tfliteModelRunner.runPreProcessorModel(
@@ -67,11 +67,33 @@ class InputImageRepository {
       originalImage: imageReshaped,
       outputTensor: segmentationTensor!,
     );
-
     return SegmentationResult(
       originalImage: imageReshapedBytes,
       outputImage: outputImage,
     );
+  }
+
+  // * test classification model
+  void runClassificatinModel({
+    required Interpreter interpreter,
+    required Uint8List input,
+  }) async {
+    // * Prepare Input Tensor
+    final imageReshaped = _imgProcessor.getReshapedImage(imageData: input);
+    final inputTensor = _imgProcessor.getInputTensor(image: imageReshaped);
+    // final outputeTensor = _imgProcessor.getClassificationModelsOutputTensor();
+    final outputTensor = [
+      [0.0, 0.0, 0.0, 0.0]
+    ];
+    // * Run classification model
+    await _tfliteModelRunner.runClassificatinModel(
+      interpreter: interpreter,
+      input: inputTensor,
+      output: outputTensor,
+    );
+
+    logger.i('Input shape: ${interpreter.getInputTensor(0).shape}');
+    logger.i('output shape: ${interpreter.getOutputTensor(0).shape}');
   }
 }
 

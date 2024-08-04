@@ -19,7 +19,8 @@ abstract class ModelRunner {
 
   Future<dynamic> runClassificatinModel({
     required Interpreter interpreter,
-    required Uint8List input,
+    required Tensor4D input,
+    required List<List<double>> output,
   });
 }
 
@@ -40,10 +41,16 @@ class TFLiteService implements InterpreterManager, ModelRunner {
   }
 
   @override
-  Future runClassificatinModel(
-      {required Interpreter interpreter, required Uint8List input}) {
-    // TODO: implement runClassificatinModel
-    throw UnimplementedError();
+  Future runClassificatinModel({
+    required Interpreter interpreter,
+    required Tensor4D input,
+    required List<List<double>> output,
+  }) {
+    final modelInput = input;
+    final modelOutput = output;
+    interpreter.run(modelInput, modelOutput);
+    logger.i('Model output: $modelOutput');
+    return Future.value(0);
   }
 
   @override
@@ -68,11 +75,14 @@ final interpreterManagerProvider =
 final interpreterProvider =
     FutureProvider.autoDispose.family<Interpreter, String>(
   (ref, assetPath) async {
+    final interpreterManager = ref.watch(interpreterManagerProvider);
+    final interpreter =
+        await interpreterManager.createInterpreter(assetPath: assetPath);
     ref.onDispose(() {
-      logger.i('Disposing interpreter');
+      interpreterManager.closeInterpreter(interpreter: interpreter);
+      logger.i('Disposing interpreter provider');
     });
 
-    final interpreterManager = ref.watch(interpreterManagerProvider);
-    return interpreterManager.createInterpreter(assetPath: assetPath);
+    return interpreter;
   },
 );
