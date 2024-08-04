@@ -42,7 +42,7 @@ class ImageAnalysisRepository {
     }
   }
 
-  Future<SegmentationResult> removeBackgroundFromImage({
+  Future<Either<String, SegmentationResult>> removeBackgroundFromImage({
     required Uint8List imageBytes,
     required Interpreter interpreter,
   }) async {
@@ -69,13 +69,13 @@ class ImageAnalysisRepository {
         originalImage: imageReshaped,
         outputTensor: segmentationTensor!,
       );
-      return SegmentationResult(
+      return right(SegmentationResult(
         originalImage: imageReshapedBytes,
         outputImage: outputImage,
-      );
+      ));
     } catch (e) {
-      logger.e('Error removing background: $e');
-      throw Exception('Error removing background');
+      logger.e('Error removing background: ${e.toString()}');
+      return left('Error removing background');
     }
   }
 

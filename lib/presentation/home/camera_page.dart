@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/core/shared/string_constants.dart';
+import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
 import 'package:rice_fertile_ai/infrastructure/tflite_service.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
@@ -48,35 +49,35 @@ class CameraPage extends ConsumerWidget {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       bottomNavigationBar: CameraScreenBottomBarWidget(
-        iconColor:
-            interpreter.isLoading ? Colors.grey : ColorConstants.primaryGreen,
-        onImageCapture: !interpreter.isLoading
-            ? () async {
-                final notifier = ref.read(imageProcessorProvider.notifier);
-                final cameraImage = await notifier.captureImage(
-                  controller: cameraController.value!,
-                  interpreter: interpreter.asData!.value,
-                );
+          iconColor: interpreter.isLoading || interpreter.hasError
+              ? Colors.grey
+              : ColorConstants.primaryGreen,
+          onImageCapture: () async {
+            SegmentationResult? segmentationResult;
+            final notifier = ref.read(imageProcessorProvider.notifier);
+            cameraController.maybeWhen(
+                orElse: () {},
+                data: (controller) {
+                  interpreter.maybeWhen(
+                      orElse: () {},
+                      data: (interpreter) async {
+                        segmentationResult =
+                            await notifier.captureAndSegmentImage(
+                                controller: controller,
+                                interpreter: interpreter);
 
-                final segmentationResult =
-                    await notifier.removeBackgroundFromImage(
-                  imageBytes: cameraImage!,
-                  interpreter: interpreter.asData!.value,
-                );
-
-                if (context.mounted) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ImagePreviewPage(
-                        segmentationResult: segmentationResult,
-                      ),
-                    ),
-                  );
-                }
-              }
-            : () {},
-      ),
+                        if (context.mounted && segmentationResult != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ImagePreviewPage(
+                                  segmentationResult: segmentationResult,
+                                ),
+                              ));
+                        }
+                      });
+                });
+          }),
       body: interpreter.when(
           data: (interpreter) => cameraController.maybeMap(
                 orElse: () => const Center(

@@ -11,9 +11,12 @@ import 'package:rice_fertile_ai/presentation/home/widgets/image_preview_widget.d
 import 'package:rice_fertile_ai/presentation/home/widgets/image_selection_widget.dart';
 
 class ImagePreviewPage extends ConsumerWidget {
-  final SegmentationResult segmentationResult;
+  final SegmentationResult? segmentationResult;
 
-  const ImagePreviewPage({super.key, required this.segmentationResult});
+  const ImagePreviewPage({
+    super.key,
+    required this.segmentationResult,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,12 +31,12 @@ class ImagePreviewPage extends ConsumerWidget {
       ),
       persistentFooterButtons: [
         ImageSelectionPlaceholderWidget(
-          onSelectImage: interpreter.hasValue
+          onSelectImage: interpreter.hasValue && segmentationResult != null
               ? () async {
                   final notifier = ref.read(imageProcessorProvider.notifier);
                   await notifier.classifyImages(
                     interpreter: interpreter.value!,
-                    segmentedImage: segmentationResult.outputImage,
+                    segmentedImage: segmentationResult!.outputImage,
                   );
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 }
@@ -60,10 +63,12 @@ class ImagePreviewPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: ImagePreviewWidget(
-                    image: segmentationResult.originalImage,
-                    imageType: ImageType.original,
-                  ),
+                  child: segmentationResult != null
+                      ? ImagePreviewWidget(
+                          image: segmentationResult!.originalImage,
+                          imageType: ImageType.original,
+                        )
+                      : const SizedBox(),
                 ),
                 const SizedBox(height: 8),
                 const Divider(
@@ -72,10 +77,12 @@ class ImagePreviewPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Expanded(
-                  child: ImagePreviewWidget(
-                    image: segmentationResult.outputImage,
-                    imageType: ImageType.segmented,
-                  ),
+                  child: segmentationResult != null
+                      ? ImagePreviewWidget(
+                          image: segmentationResult!.outputImage,
+                          imageType: ImageType.segmented,
+                        )
+                      : const SizedBox(),
                 ),
               ],
             ),

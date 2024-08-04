@@ -31,7 +31,33 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return ImageProcessorState.initial();
   }
 
-  Future<Uint8List?> captureImage({
+  Future<SegmentationResult?> captureAndSegmentImage({
+    required CameraController controller,
+    required Interpreter interpreter,
+  }) async {
+    SegmentationResult? result;
+
+    state = const AsyncLoading();
+    Uint8List? image =
+        await _captureImage(controller: controller, interpreter: interpreter);
+    if (image != null) {
+      result = await _removeBackgroundFromImage(
+        imageBytes: image,
+        interpreter: interpreter,
+      );
+      state = AsyncData(state.value!);
+    } else {
+      state = AsyncError('Error capturing image', StackTrace.current);
+    }
+
+    if (result == null) {
+      state = AsyncError('Error segmenting image', StackTrace.current);
+    }
+
+    return result;
+  }
+
+  Future<Uint8List?> _captureImage({
     required CameraController controller,
     required Interpreter interpreter,
   }) async {
@@ -58,18 +84,28 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return image;
   }
 
-  Future<SegmentationResult> removeBackgroundFromImage({
+  Future<SegmentationResult?> _removeBackgroundFromImage({
     required Uint8List imageBytes,
     required Interpreter interpreter,
   }) async {
+    SegmentationResult? output;
     state = const AsyncLoading();
     final repo = ref.watch(imageProcessingRepositoryProvider);
     final result = await repo.removeBackgroundFromImage(
       imageBytes: imageBytes,
       interpreter: interpreter,
     );
-    state = AsyncData(state.value!);
-    return result;
+
+    result.fold(
+      (failure) {
+        state = AsyncError(failure, StackTrace.current);
+      },
+      (segmentationResult) {
+        state = AsyncData(state.value!);
+        return output = segmentationResult;
+      },
+    );
+    return output;
   }
 
   void updateImageList(SegmentationResult segmentationResult) {
