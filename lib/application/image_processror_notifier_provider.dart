@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/infrastructure/image_analysis_repository.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
@@ -13,14 +12,11 @@ part 'image_processror_notifier_provider.freezed.dart';
 @freezed
 class ImageProcessorState with _$ImageProcessorState {
   const factory ImageProcessorState({
-    required List<Uint8List> originalImage,
-    required List<Uint8List> processedImages,
+    required List<int> lccResult,
   }) = _ImageProcessorState;
 
-  factory ImageProcessorState.initial() => const ImageProcessorState(
-        originalImage: [],
-        processedImages: [],
-      );
+  factory ImageProcessorState.initial() =>
+      const ImageProcessorState(lccResult: []);
 }
 
 // * ImageProcessorNotifier
@@ -47,10 +43,12 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
       );
       state = AsyncData(state.value!);
     } else {
+      logger.e('Error captureing image');
       state = AsyncError('Error capturing image', StackTrace.current);
     }
 
     if (result == null) {
+      logger.e('Error segmenting image');
       state = AsyncError('Error segmenting image', StackTrace.current);
     }
 
@@ -108,27 +106,32 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return output;
   }
 
-  void updateImageList(SegmentationResult segmentationResult) {
+  Future<void> updateState({required int result}) async {
     state = AsyncData(
-      ImageProcessorState(
-        originalImage: [
-          ...state.value!.originalImage,
-          segmentationResult.originalImage
-        ],
-        processedImages: [
-          ...state.value!.processedImages,
-          segmentationResult.outputImage
-        ],
-      ),
+      ImageProcessorState(lccResult: [...state.value!.lccResult, result]),
     );
+    logger.i('Statee: ${state.value?.lccResult}');
   }
 
-  Future<void> classifyImages({
+  Future<int> classifyImages({
     required Interpreter interpreter,
     required Uint8List segmentedImage,
   }) async {
+    int lccResult = -1;
     final repo = ref.watch(imageProcessingRepositoryProvider);
-    repo.runClassificatinModel(interpreter: interpreter, input: segmentedImage);
+    state = const AsyncLoading();
+    final result = await repo.runClassificatinModel(
+      interpreter: interpreter,
+      input: segmentedImage,
+    );
+
+    result.fold((error) {
+      state = AsyncError(error, StackTrace.current);
+    }, (outputLabel) {
+      state = AsyncData(state.value!);
+      lccResult = outputLabel;
+    });
+    return lccResult;
   }
 }
 

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -25,8 +27,10 @@ class ImagePreviewPage extends StatefulHookConsumerWidget {
 }
 
 class _ImagePreviewPageState extends ConsumerState<ImagePreviewPage> {
+  int _result = -1;
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
     super.initState();
     _init();
   }
@@ -36,10 +40,12 @@ class _ImagePreviewPageState extends ConsumerState<ImagePreviewPage> {
     final interpreter = await ref
         .read(interpreterProvider(StrConsts.classificationModelPath).future);
 
-    await ref.read(imageProcessorProvider.notifier).classifyImages(
+    _result = await ref.read(imageProcessorProvider.notifier).classifyImages(
           interpreter: interpreter,
           segmentedImage: widget.segmentationResult.outputImage,
         );
+
+    print('');
   }
 
   @override
@@ -75,6 +81,10 @@ class _ImagePreviewPageState extends ConsumerState<ImagePreviewPage> {
       persistentFooterButtons: [
         ImageSelectionPlaceholderWidget(
           onSelectImage: () async {
+            if (_result > 1 && _result < 6) {
+              final notifier = ref.read(imageProcessorProvider.notifier);
+              await notifier.updateState(result: _result);
+            }
             if (context.mounted) {
               Navigator.of(context).popUntil((route) => route.isFirst);
             }

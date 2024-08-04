@@ -24,7 +24,6 @@ class LogProviderObserver extends ProviderObserver {
   @override
   void didDisposeProvider(
       ProviderBase<Object?> provider, ProviderContainer container) {
-    // TODO: implement didDisposeProvider
     super.didDisposeProvider(provider, container);
     logger.d('$provider Disposed');
   }

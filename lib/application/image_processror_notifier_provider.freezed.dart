@@ -16,8 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ImageProcessorState {
-  List<Uint8List> get originalImage => throw _privateConstructorUsedError;
-  List<Uint8List> get processedImages => throw _privateConstructorUsedError;
+  List<int> get lccResult => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ImageProcessorStateCopyWith<ImageProcessorState> get copyWith =>
@@ -30,7 +29,7 @@ abstract class $ImageProcessorStateCopyWith<$Res> {
           ImageProcessorState value, $Res Function(ImageProcessorState) then) =
       _$ImageProcessorStateCopyWithImpl<$Res, ImageProcessorState>;
   @useResult
-  $Res call({List<Uint8List> originalImage, List<Uint8List> processedImages});
+  $Res call({List<int> lccResult});
 }
 
 /// @nodoc
@@ -46,18 +45,13 @@ class _$ImageProcessorStateCopyWithImpl<$Res, $Val extends ImageProcessorState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? originalImage = null,
-    Object? processedImages = null,
+    Object? lccResult = null,
   }) {
     return _then(_value.copyWith(
-      originalImage: null == originalImage
-          ? _value.originalImage
-          : originalImage // ignore: cast_nullable_to_non_nullable
-              as List<Uint8List>,
-      processedImages: null == processedImages
-          ? _value.processedImages
-          : processedImages // ignore: cast_nullable_to_non_nullable
-              as List<Uint8List>,
+      lccResult: null == lccResult
+          ? _value.lccResult
+          : lccResult // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
   }
 }
@@ -70,7 +64,7 @@ abstract class _$$ImageProcessorStateImplCopyWith<$Res>
       __$$ImageProcessorStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Uint8List> originalImage, List<Uint8List> processedImages});
+  $Res call({List<int> lccResult});
 }
 
 /// @nodoc
@@ -84,50 +78,44 @@ class __$$ImageProcessorStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? originalImage = null,
-    Object? processedImages = null,
+    Object? lccResult = null,
   }) {
     return _then(_$ImageProcessorStateImpl(
-      originalImage: null == originalImage
-          ? _value._originalImage
-          : originalImage // ignore: cast_nullable_to_non_nullable
-              as List<Uint8List>,
-      processedImages: null == processedImages
-          ? _value._processedImages
-          : processedImages // ignore: cast_nullable_to_non_nullable
-              as List<Uint8List>,
+      lccResult: null == lccResult
+          ? _value._lccResult
+          : lccResult // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$ImageProcessorStateImpl implements _ImageProcessorState {
-  const _$ImageProcessorStateImpl(
-      {required final List<Uint8List> originalImage,
-      required final List<Uint8List> processedImages})
-      : _originalImage = originalImage,
-        _processedImages = processedImages;
+class _$ImageProcessorStateImpl
+    with DiagnosticableTreeMixin
+    implements _ImageProcessorState {
+  const _$ImageProcessorStateImpl({required final List<int> lccResult})
+      : _lccResult = lccResult;
 
-  final List<Uint8List> _originalImage;
+  final List<int> _lccResult;
   @override
-  List<Uint8List> get originalImage {
-    if (_originalImage is EqualUnmodifiableListView) return _originalImage;
+  List<int> get lccResult {
+    if (_lccResult is EqualUnmodifiableListView) return _lccResult;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_originalImage);
-  }
-
-  final List<Uint8List> _processedImages;
-  @override
-  List<Uint8List> get processedImages {
-    if (_processedImages is EqualUnmodifiableListView) return _processedImages;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_processedImages);
+    return EqualUnmodifiableListView(_lccResult);
   }
 
   @override
-  String toString() {
-    return 'ImageProcessorState(originalImage: $originalImage, processedImages: $processedImages)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ImageProcessorState(lccResult: $lccResult)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ImageProcessorState'))
+      ..add(DiagnosticsProperty('lccResult', lccResult));
   }
 
   @override
@@ -136,16 +124,12 @@ class _$ImageProcessorStateImpl implements _ImageProcessorState {
         (other.runtimeType == runtimeType &&
             other is _$ImageProcessorStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._originalImage, _originalImage) &&
-            const DeepCollectionEquality()
-                .equals(other._processedImages, _processedImages));
+                .equals(other._lccResult, _lccResult));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_originalImage),
-      const DeepCollectionEquality().hash(_processedImages));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_lccResult));
 
   @JsonKey(ignore: true)
   @override
@@ -156,15 +140,11 @@ class _$ImageProcessorStateImpl implements _ImageProcessorState {
 }
 
 abstract class _ImageProcessorState implements ImageProcessorState {
-  const factory _ImageProcessorState(
-          {required final List<Uint8List> originalImage,
-          required final List<Uint8List> processedImages}) =
+  const factory _ImageProcessorState({required final List<int> lccResult}) =
       _$ImageProcessorStateImpl;
 
   @override
-  List<Uint8List> get originalImage;
-  @override
-  List<Uint8List> get processedImages;
+  List<int> get lccResult;
   @override
   @JsonKey(ignore: true)
   _$$ImageProcessorStateImplCopyWith<_$ImageProcessorStateImpl> get copyWith =>
