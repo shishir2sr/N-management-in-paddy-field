@@ -109,5 +109,18 @@ class CameraPage extends ConsumerWidget {
         }
       },
     );
+    ref.listen(interpreterProvider(StrConsts.segmentationModelPath),
+        (state, next) {
+      state?.maybeWhen(
+        orElse: () {},
+        error: (error, stackTrace) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.toString()),
+            ),
+          );
+        },
+      );
+    });
   }
 }

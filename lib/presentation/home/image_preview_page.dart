@@ -51,6 +51,21 @@ class _ImagePreviewPageState extends ConsumerState<ImagePreviewPage> {
       orElse: () => context.loaderOverlay.hide(),
     );
 
+    ref.listen(interpreterProvider(StrConsts.segmentationModelPath),
+        (state, next) {
+      state?.maybeWhen(
+          orElse: () {},
+          error: (e, s) {
+            context.loaderOverlay.hide();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.toString()),
+                backgroundColor: Colors.red,
+              ),
+            );
+          });
+    });
+
     return Scaffold(
       backgroundColor: ColorConstants.secondaryBackgroundColor,
       appBar: getAppBar(

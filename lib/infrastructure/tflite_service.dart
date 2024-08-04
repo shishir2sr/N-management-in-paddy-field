@@ -15,7 +15,7 @@ abstract class ModelRunner {
     required Tensor4D output,
   });
 
-  Tensor2D runClassificatinModel({
+  int runClassificatinModel({
     required Interpreter interpreter,
     required Tensor4D input,
     required List<List<double>> output,
@@ -42,16 +42,29 @@ class TFLiteService implements InterpreterManager, ModelRunner {
   }
 
   @override
-  Tensor2D runClassificatinModel({
+  int runClassificatinModel({
     required Interpreter interpreter,
     required Tensor4D input,
     required Tensor2D output,
   }) {
     final modelInput = input;
     final modelOutput = output;
+
     interpreter.run(modelInput, modelOutput);
     logger.i('Model output: $modelOutput');
-    return modelOutput;
+
+    return _getLabelFromOutput(modelOutput);
+  }
+
+  int _getLabelFromOutput(Tensor2D modelOutput) {
+    final classificationLabels = [2, 3, 4, 5];
+    List<double> flattenedOutput = modelOutput.flatten();
+
+    int maxIndex = flattenedOutput.indexWhere((element) =>
+        element ==
+        flattenedOutput.reduce((curr, next) => curr > next ? curr : next));
+
+    return classificationLabels[maxIndex];
   }
 
   @override

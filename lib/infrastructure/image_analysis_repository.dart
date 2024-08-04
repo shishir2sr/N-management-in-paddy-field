@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/domain/camera_failure.dart';
 import 'package:rice_fertile_ai/domain/segmentation_result.dart';
+import 'package:rice_fertile_ai/domain/typedefs.dart';
 import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
 import 'package:rice_fertile_ai/infrastructure/image_processing_service.dart';
 import 'package:rice_fertile_ai/infrastructure/tflite_service.dart';
@@ -80,27 +81,26 @@ class ImageAnalysisRepository {
   }
 
   // * test classification model
-  Future<void> runClassificatinModel({
+  Future<Either<String, int>> runClassificatinModel({
     required Interpreter interpreter,
     required Uint8List input,
   }) async {
     // * Prepare Input Tensor
-
     img.Image? image = img.decodeImage(Uint8List.fromList(input));
-    final inputTensor = _imgProcessor.getInputTensor(image: image!);
-
-    final outputTensor = [
+    if (image == null) return left('Image cannot be decoded');
+    final inputTensor = _imgProcessor.getInputTensor(image: image);
+    Tensor2D outputTensor = [
       [0.0, 0.0, 0.0, 0.0]
     ];
+
     // * Run classification model
-    _tfliteModelRunner.runClassificatinModel(
+    final result = _tfliteModelRunner.runClassificatinModel(
       interpreter: interpreter,
       input: inputTensor,
       output: outputTensor,
     );
-
-    logger.i('Input shape: ${interpreter.getInputTensor(0).shape}');
-    logger.i('output shape: ${interpreter.getOutputTensor(0).shape}');
+    logger.i('result: $result');
+    return right(result);
   }
 }
 
