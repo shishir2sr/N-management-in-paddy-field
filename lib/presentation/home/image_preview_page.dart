@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
+import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/core/shared/string_constants.dart';
 import 'package:rice_fertile_ai/domain/image_type.dart';
 import 'package:rice_fertile_ai/domain/segmentation_result.dart';
@@ -84,6 +85,7 @@ class _ImagePreviewPageState extends ConsumerState<ImagePreviewPage> {
             if (_result > 1 && _result < 6) {
               final notifier = ref.read(imageProcessorProvider.notifier);
               await notifier.updateState(result: _result);
+              logger.i('remaining: ${imageProcessor.value?.remaining}');
             }
             if (context.mounted) {
               Navigator.of(context).popUntil((route) => route.isFirst);

@@ -11,12 +11,15 @@ part 'image_processror_notifier_provider.freezed.dart';
 
 @freezed
 class ImageProcessorState with _$ImageProcessorState {
+  const ImageProcessorState._();
   const factory ImageProcessorState({
     required List<int> lccResult,
   }) = _ImageProcessorState;
 
   factory ImageProcessorState.initial() =>
       const ImageProcessorState(lccResult: []);
+  int get remaining => (10 - lccResult.length).toInt();
+  double get percentage => lccResult.length.toDouble();
 }
 
 // * ImageProcessorNotifier

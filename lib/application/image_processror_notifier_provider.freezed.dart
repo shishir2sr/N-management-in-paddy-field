@@ -91,11 +91,11 @@ class __$$ImageProcessorStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ImageProcessorStateImpl
-    with DiagnosticableTreeMixin
-    implements _ImageProcessorState {
+class _$ImageProcessorStateImpl extends _ImageProcessorState
+    with DiagnosticableTreeMixin {
   const _$ImageProcessorStateImpl({required final List<int> lccResult})
-      : _lccResult = lccResult;
+      : _lccResult = lccResult,
+        super._();
 
   final List<int> _lccResult;
   @override
@@ -139,9 +139,10 @@ class _$ImageProcessorStateImpl
           this, _$identity);
 }
 
-abstract class _ImageProcessorState implements ImageProcessorState {
+abstract class _ImageProcessorState extends ImageProcessorState {
   const factory _ImageProcessorState({required final List<int> lccResult}) =
       _$ImageProcessorStateImpl;
+  const _ImageProcessorState._() : super._();
 
   @override
   List<int> get lccResult;
