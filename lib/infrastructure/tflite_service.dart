@@ -39,7 +39,6 @@ class TFLiteService implements InterpreterManager, ModelRunner {
   @override
   void closeInterpreter({required Interpreter interpreter}) {
     interpreter.close();
-    logger.i('${interpreter.hashCode} Interpreter closed');
   }
 
   @override
@@ -82,7 +81,6 @@ final interpreterProvider =
         await interpreterManager.createInterpreter(assetPath: assetPath);
     ref.onDispose(() {
       interpreterManager.closeInterpreter(interpreter: interpreter);
-      logger.i('Disposing interpreter provider');
     });
 
     return interpreter;

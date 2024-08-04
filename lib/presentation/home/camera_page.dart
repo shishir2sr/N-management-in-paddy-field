@@ -20,26 +20,9 @@ class CameraPage extends ConsumerWidget {
     final cameraController = ref.watch(cameraControllerProviderProvider);
     final interpreter =
         ref.watch(interpreterProvider(StrConsts.segmentationModelPath));
-    // listen to the controller initialization error
-    ref.listen(cameraControllerProviderProvider, (state, next) {
-      if (state == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to initialize camera'),
-          ),
-        );
-      } else {
-        state.maybeWhen(
-          orElse: () {},
-          error: (error, stackTrace) =>
-              ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(error.toString()),
-            ),
-          ),
-        );
-      }
-    });
+
+    // Show error if there is any
+    _showError(ref, context);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -63,17 +46,19 @@ class CameraPage extends ConsumerWidget {
                       data: (interpreter) async {
                         segmentationResult =
                             await notifier.captureAndSegmentImage(
-                                controller: controller,
-                                interpreter: interpreter);
+                          controller: controller,
+                          interpreter: interpreter,
+                        );
 
                         if (context.mounted && segmentationResult != null) {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ImagePreviewPage(
-                                  segmentationResult: segmentationResult,
-                                ),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImagePreviewPage(
+                                segmentationResult: segmentationResult!,
+                              ),
+                            ),
+                          );
                         }
                       });
                 });
@@ -98,6 +83,31 @@ class CameraPage extends ConsumerWidget {
                 child: Text("Interpreter Error: ${error.toString()}"),
               ),
           loading: () => const Center(child: CupertinoActivityIndicator())),
+    );
+  }
+
+  void _showError(WidgetRef ref, BuildContext context) {
+    ref.listen(
+      cameraControllerProviderProvider,
+      (state, next) {
+        if (state == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Failed to initialize camera'),
+            ),
+          );
+        } else {
+          state.maybeWhen(
+            orElse: () {},
+            error: (error, stackTrace) =>
+                ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(error.toString()),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
