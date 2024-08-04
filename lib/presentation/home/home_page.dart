@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
-import 'package:rice_fertile_ai/core/shared/string_constants.dart';
-import 'package:rice_fertile_ai/infrastructure/tflite_service.dart';
 import 'package:rice_fertile_ai/presentation/home/camera_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/radial_slider_widget.dart';
@@ -14,10 +11,6 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(imageProcessorProvider).value?.originalImage;
-    final interpreter = ref.watch(
-      interpreterProvider(StringConstants.classificationModelPath),
-    );
     final deviceWidth = MediaQuery.of(context).size.width;
 
     var listContentWidth = (deviceWidth - 60) / 10;
@@ -38,11 +31,7 @@ class HomePage extends ConsumerWidget {
             );
           }, //_recognitions.length < 10 ? selectFromCamera : () {},
           restartProgress: () {}, // resetPrediction,
-          selectFromGallery: () {
-            ref
-                .read(imageProcessorProvider.notifier)
-                .testClassificatinModel(interpreter: interpreter.value!);
-          },
+          selectFromGallery: () {},
           //_recognitions.length < 10 ? selectFromImagePicker : () {},
         ),
         body: Column(

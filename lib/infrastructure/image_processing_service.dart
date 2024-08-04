@@ -28,7 +28,7 @@ abstract class ImageProcessingService {
   ///
   /// Returns:
   ///   A Tensor4D object representing the input tensor for image processing.
-  Tensor4D getInputTensor({required img.Image image, int width, int height});
+  Tensor4D getInputTensor({required img.Image image});
 
   /// Retrieves the output image as a Uint8List.
   ///
@@ -81,9 +81,9 @@ class ImageProcessingServiceImpl implements ImageProcessingService {
   @override
   Tensor4D getInputTensor({
     required img.Image image,
-    int width = 256,
-    int height = 256,
   }) {
+    final height = image.height;
+    final width = image.width;
     Tensor4D tensor = List.generate(
       1,
       (_) => List.generate(

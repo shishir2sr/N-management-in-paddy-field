@@ -17,9 +17,8 @@ class CameraPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cameraController = ref.watch(cameraControllerProviderProvider);
-    final interpreter = ref.watch(interpreterProvider(
-      StringConstants.segmentationModelPath,
-    ));
+    final interpreter =
+        ref.watch(interpreterProvider(StrConsts.segmentationModelPath));
     // listen to the controller initialization error
     ref.listen(cameraControllerProviderProvider, (state, next) {
       if (state == null) {
@@ -33,8 +32,8 @@ class CameraPage extends ConsumerWidget {
           orElse: () {},
           error: (error, stackTrace) =>
               ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Failed to initialize camera'),
+            SnackBar(
+              content: Text(error.toString()),
             ),
           ),
         );

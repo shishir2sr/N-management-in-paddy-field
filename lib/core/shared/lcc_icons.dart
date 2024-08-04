@@ -5,7 +5,7 @@ import 'package:rice_fertile_ai/core/shared/string_constants.dart';
 class LccIcons {
   /// Leaf Icon
   static Widget leafIcon = const CustomSvgIcon(
-    assetPath: StringConstants.cameraIconPath,
+    assetPath: StrConsts.cameraIconPath,
     semanticsLabel: 'Leaf Icon',
     color: Colors.white,
   );

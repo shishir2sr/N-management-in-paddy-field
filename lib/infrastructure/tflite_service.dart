@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/domain/tensor4d.dart';
@@ -28,16 +26,20 @@ abstract class ModelRunner {
 class TFLiteService implements InterpreterManager, ModelRunner {
   @override
   Future<Interpreter> createInterpreter({required String assetPath}) async {
-    final interpreter = await Interpreter.fromAsset(assetPath);
-
-    logger.i('Interpreter created');
-    return interpreter;
+    try {
+      final interpreter = await Interpreter.fromAsset(assetPath);
+      logger.i('Interpreter created from: $assetPath');
+      return interpreter;
+    } catch (e) {
+      logger.e('Error creating interpreter: $e');
+      throw Exception('Error creating interpreter');
+    }
   }
 
   @override
   void closeInterpreter({required Interpreter interpreter}) {
     interpreter.close();
-    logger.i('Interpreter closed');
+    logger.i('${interpreter.hashCode} Interpreter closed');
   }
 
   @override

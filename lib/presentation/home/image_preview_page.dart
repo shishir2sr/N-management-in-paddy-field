@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
+import 'package:rice_fertile_ai/core/shared/string_constants.dart';
 import 'package:rice_fertile_ai/domain/image_type.dart';
 import 'package:rice_fertile_ai/domain/segmentation_result.dart';
+import 'package:rice_fertile_ai/infrastructure/tflite_service.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/image_preview_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/image_selection_widget.dart';
@@ -15,6 +17,9 @@ class ImagePreviewPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final interpreter = ref.watch(
+      interpreterProvider(StrConsts.classificationModelPath),
+    );
     return Scaffold(
       backgroundColor: ColorConstants.secondaryBackgroundColor,
       appBar: getAppBar(
@@ -23,11 +28,16 @@ class ImagePreviewPage extends ConsumerWidget {
       ),
       persistentFooterButtons: [
         ImageSelectionPlaceholderWidget(
-          onSelectImage: () {
-            final notifier = ref.read(imageProcessorProvider.notifier);
-            notifier.updateImageList(segmentationResult);
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
+          onSelectImage: interpreter.hasValue
+              ? () async {
+                  final notifier = ref.read(imageProcessorProvider.notifier);
+                  await notifier.classifyImages(
+                    interpreter: interpreter.value!,
+                    segmentedImage: segmentationResult.outputImage,
+                  );
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                }
+              : () {},
           onRetakeImage: () {
             Navigator.of(context).pop();
           },
