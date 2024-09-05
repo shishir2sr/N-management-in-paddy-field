@@ -15,7 +15,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final imageProcessor = ref.watch(imageProcessorProvider);
+    final imageProcessorState = ref.watch(imageProcessorProvider).value;
     ref.listen(imageProcessorProvider, (state, next) {
       state?.maybeWhen(
         orElse: () => context.loaderOverlay.hide(),
@@ -43,14 +43,10 @@ class HomePage extends ConsumerWidget {
           appBar: getAppBar(title: "RiceFertile AI"),
           backgroundColor: Colors.white,
           bottomNavigationBar: BottomNavBar(
-            selectFromCamera: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CameraPage(),
-                ),
-              );
-            }, //_recognitions.length < 10 ? selectFromCamera : () {},
+            selectFromCamera: imageProcessorState?.remaining == 0
+                ? () => showSnackBar(context,
+                    'You have reached the maximum number of images. Please proceed to the next step.')
+                : () => gotoCameraPage(context),
             restartProgress: () {}, // resetPrediction,
             selectFromGallery: () {},
             //_recognitions.length < 10 ? selectFromImagePicker : () {},
@@ -59,23 +55,42 @@ class HomePage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RadialSliderWidget(
-                percentage: imageProcessor.value?.percentage ?? 0,
-                remaining: imageProcessor.value?.remaining ?? 0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ResultScreen(
-                        lccResult: 3.5,
-                      ),
-                    ),
-                  );
-                },
-              ),
+                  percentage: imageProcessorState?.percentage ?? 0,
+                  remaining: imageProcessorState?.remaining ?? 0,
+                  onPressed: () => gotoResultScreen(context)),
               const ResultGridViewWidget(),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void gotoResultScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ResultScreen(
+          lccResult: 3.5,
+        ),
+      ),
+    );
+  }
+
+  void gotoCameraPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CameraPage(),
+      ),
+    );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
       ),
     );
   }
