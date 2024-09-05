@@ -24,10 +24,7 @@ class ImagePreviewWidget extends StatelessWidget {
           child: Image.memory(image, fit: BoxFit.fitWidth),
         ),
         GlassmorphicContainer(
-          color: switch (imageType) {
-            ImageType.original => Colors.black,
-            ImageType.segmented => Colors.white,
-          },
+          color: Colors.white,
           height: 40,
           width: double.infinity,
           child: Text(
@@ -36,10 +33,7 @@ class ImagePreviewWidget extends StatelessWidget {
               ImageType.segmented => 'After'
             },
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: switch (imageType) {
-                    ImageType.original => Colors.black,
-                    ImageType.segmented => Colors.white,
-                  },
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
           ),
