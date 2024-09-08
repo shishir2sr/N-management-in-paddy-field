@@ -8,6 +8,7 @@ import 'package:rice_fertile_ai/presentation/home/camera_page.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/radial_slider_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/resut_gridview_widget.dart';
+import 'package:rice_fertile_ai/presentation/result/input_page.dart';
 import 'package:rice_fertile_ai/presentation/result/result_page.dart';
 
 class HomePage extends ConsumerWidget {
@@ -55,9 +56,11 @@ class HomePage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               RadialSliderWidget(
-                  percentage: imageProcessorState?.percentage ?? 0,
-                  remaining: imageProcessorState?.remaining ?? 0,
-                  onPressed: () => gotoResultScreen(context)),
+                percentage: imageProcessorState?.percentage ?? 0,
+                remaining: imageProcessorState?.remaining ?? 0,
+                // onPressed: () => gotoResultScreen(context),
+                onPressed: () => gotoInputPage(context),
+              ),
               const ResultGridViewWidget(),
             ],
           ),
@@ -73,6 +76,15 @@ class HomePage extends ConsumerWidget {
         builder: (context) => const ResultScreen(
           lccResult: 3.5,
         ),
+      ),
+    );
+  }
+
+  void gotoInputPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LandInputPage(),
       ),
     );
   }

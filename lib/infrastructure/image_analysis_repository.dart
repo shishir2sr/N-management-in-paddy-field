@@ -110,6 +110,10 @@ final imageProcessingRepositoryProvider =
   final cameraService = ref.watch(cameraDataSourceProvider);
   final modelRunner = ref.watch(modelRunnerProvider);
   final imageProcessingService = ref.watch(imageProcessingServiceProvider);
+
   return ImageAnalysisRepository(
-      cameraService, modelRunner, imageProcessingService);
+    cameraService,
+    modelRunner,
+    imageProcessingService,
+  );
 });

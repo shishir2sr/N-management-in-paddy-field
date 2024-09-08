@@ -14,14 +14,13 @@ class AmountOfLandTextFormField extends StatelessWidget {
     return TextFormField(
       onSaved: onSaved,
       decoration: const InputDecoration(
-          hintText: 'Enter amount of land (decimal value)',
+          hintText: 'Enter amount of land',
           hintStyle: TextStyle(
             color: Colors.grey,
             fontSize: 12.0,
             letterSpacing: 2,
           ),
           labelText: "Amount of Land *",
-          helperText: "247.13 decimal = 1 hector, 100.009 decimal = 1 acre",
           helperMaxLines: 2,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(16.0)),
