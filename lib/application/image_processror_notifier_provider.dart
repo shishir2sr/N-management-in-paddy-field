@@ -17,7 +17,7 @@ class ImageProcessorState with _$ImageProcessorState {
   }) = _ImageProcessorState;
 
   factory ImageProcessorState.initial() =>
-      const ImageProcessorState(lccResult: []);
+      const ImageProcessorState(lccResult: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
   int get remaining => (10 - lccResult.length).toInt();
   double get percentage => lccResult.length.toDouble();
 }
