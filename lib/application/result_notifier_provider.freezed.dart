@@ -16,9 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ResultState {
-  double get result => throw _privateConstructorUsedError;
+  double get landAmountInBigha => throw _privateConstructorUsedError;
   LandConversionStrategy get selectedStrategy =>
       throw _privateConstructorUsedError;
+  String get recommendation => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ResultStateCopyWith<ResultState> get copyWith =>
@@ -31,7 +32,10 @@ abstract class $ResultStateCopyWith<$Res> {
           ResultState value, $Res Function(ResultState) then) =
       _$ResultStateCopyWithImpl<$Res, ResultState>;
   @useResult
-  $Res call({double result, LandConversionStrategy selectedStrategy});
+  $Res call(
+      {double landAmountInBigha,
+      LandConversionStrategy selectedStrategy,
+      String recommendation});
 }
 
 /// @nodoc
@@ -47,18 +51,23 @@ class _$ResultStateCopyWithImpl<$Res, $Val extends ResultState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? result = null,
+    Object? landAmountInBigha = null,
     Object? selectedStrategy = null,
+    Object? recommendation = null,
   }) {
     return _then(_value.copyWith(
-      result: null == result
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
+      landAmountInBigha: null == landAmountInBigha
+          ? _value.landAmountInBigha
+          : landAmountInBigha // ignore: cast_nullable_to_non_nullable
               as double,
       selectedStrategy: null == selectedStrategy
           ? _value.selectedStrategy
           : selectedStrategy // ignore: cast_nullable_to_non_nullable
               as LandConversionStrategy,
+      recommendation: null == recommendation
+          ? _value.recommendation
+          : recommendation // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -71,7 +80,10 @@ abstract class _$$ResultStateImplCopyWith<$Res>
       __$$ResultStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double result, LandConversionStrategy selectedStrategy});
+  $Res call(
+      {double landAmountInBigha,
+      LandConversionStrategy selectedStrategy,
+      String recommendation});
 }
 
 /// @nodoc
@@ -85,18 +97,23 @@ class __$$ResultStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? result = null,
+    Object? landAmountInBigha = null,
     Object? selectedStrategy = null,
+    Object? recommendation = null,
   }) {
     return _then(_$ResultStateImpl(
-      result: null == result
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
+      landAmountInBigha: null == landAmountInBigha
+          ? _value.landAmountInBigha
+          : landAmountInBigha // ignore: cast_nullable_to_non_nullable
               as double,
       selectedStrategy: null == selectedStrategy
           ? _value.selectedStrategy
           : selectedStrategy // ignore: cast_nullable_to_non_nullable
               as LandConversionStrategy,
+      recommendation: null == recommendation
+          ? _value.recommendation
+          : recommendation // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -104,17 +121,22 @@ class __$$ResultStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
-  _$ResultStateImpl({required this.result, required this.selectedStrategy})
+  _$ResultStateImpl(
+      {required this.landAmountInBigha,
+      required this.selectedStrategy,
+      required this.recommendation})
       : super._();
 
   @override
-  final double result;
+  final double landAmountInBigha;
   @override
   final LandConversionStrategy selectedStrategy;
+  @override
+  final String recommendation;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ResultState(result: $result, selectedStrategy: $selectedStrategy)';
+    return 'ResultState(landAmountInBigha: $landAmountInBigha, selectedStrategy: $selectedStrategy, recommendation: $recommendation)';
   }
 
   @override
@@ -122,8 +144,9 @@ class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ResultState'))
-      ..add(DiagnosticsProperty('result', result))
-      ..add(DiagnosticsProperty('selectedStrategy', selectedStrategy));
+      ..add(DiagnosticsProperty('landAmountInBigha', landAmountInBigha))
+      ..add(DiagnosticsProperty('selectedStrategy', selectedStrategy))
+      ..add(DiagnosticsProperty('recommendation', recommendation));
   }
 
   @override
@@ -131,13 +154,17 @@ class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ResultStateImpl &&
-            (identical(other.result, result) || other.result == result) &&
+            (identical(other.landAmountInBigha, landAmountInBigha) ||
+                other.landAmountInBigha == landAmountInBigha) &&
             (identical(other.selectedStrategy, selectedStrategy) ||
-                other.selectedStrategy == selectedStrategy));
+                other.selectedStrategy == selectedStrategy) &&
+            (identical(other.recommendation, recommendation) ||
+                other.recommendation == recommendation));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, result, selectedStrategy);
+  int get hashCode => Object.hash(
+      runtimeType, landAmountInBigha, selectedStrategy, recommendation);
 
   @JsonKey(ignore: true)
   @override
@@ -148,15 +175,17 @@ class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
 
 abstract class _ResultState extends ResultState {
   factory _ResultState(
-          {required final double result,
-          required final LandConversionStrategy selectedStrategy}) =
-      _$ResultStateImpl;
+      {required final double landAmountInBigha,
+      required final LandConversionStrategy selectedStrategy,
+      required final String recommendation}) = _$ResultStateImpl;
   _ResultState._() : super._();
 
   @override
-  double get result;
+  double get landAmountInBigha;
   @override
   LandConversionStrategy get selectedStrategy;
+  @override
+  String get recommendation;
   @override
   @JsonKey(ignore: true)
   _$$ResultStateImplCopyWith<_$ResultStateImpl> get copyWith =>

@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 
 void main() {
-  runApp(ProviderScope(
-    observers: [LogProviderObserver()],
-    child: const RiceFertileAi(),
-  ));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(ProviderScope(
+      observers: [LogProviderObserver()],
+      child: const RiceFertileAi(),
+    ));
+  });
 }
 
 class RiceFertileAi extends StatelessWidget {

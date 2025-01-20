@@ -17,7 +17,7 @@ class ImageProcessorState with _$ImageProcessorState {
   }) = _ImageProcessorState;
 
   factory ImageProcessorState.initial() =>
-      const ImageProcessorState(lccResult: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+      const ImageProcessorState(lccResult: []);
   int get remaining => (10 - lccResult.length).toInt();
   double get percentage => lccResult.length.toDouble();
 }
@@ -56,6 +56,10 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     }
 
     return result;
+  }
+
+  void resetPrediction() {
+    state = AsyncData(ImageProcessorState.initial());
   }
 
   Future<Uint8List?> _captureImage({

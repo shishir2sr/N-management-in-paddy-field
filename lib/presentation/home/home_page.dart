@@ -9,7 +9,6 @@ import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.d
 import 'package:rice_fertile_ai/presentation/home/widgets/radial_slider_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/resut_gridview_widget.dart';
 import 'package:rice_fertile_ai/presentation/result/input_page.dart';
-import 'package:rice_fertile_ai/presentation/result/result_page.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -17,6 +16,8 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final imageProcessorState = ref.watch(imageProcessorProvider).value;
+    final imageProcessorStateNotifier =
+        ref.read(imageProcessorProvider.notifier);
     ref.listen(imageProcessorProvider, (state, next) {
       state?.maybeWhen(
         orElse: () => context.loaderOverlay.hide(),
@@ -48,33 +49,27 @@ class HomePage extends ConsumerWidget {
                 ? () => showSnackBar(context,
                     'You have reached the maximum number of images. Please proceed to the next step.')
                 : () => gotoCameraPage(context),
-            restartProgress: () {}, // resetPrediction,
+            restartProgress: () {
+              imageProcessorStateNotifier.resetPrediction();
+            }, // resetPrediction,
             selectFromGallery: () {},
             //_recognitions.length < 10 ? selectFromImagePicker : () {},
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              RadialSliderWidget(
-                percentage: imageProcessorState?.percentage ?? 0,
-                remaining: imageProcessorState?.remaining ?? 0,
-                // onPressed: () => gotoResultScreen(context),
-                onPressed: () => gotoInputPage(context),
+              Expanded(
+                flex: 2,
+                child: RadialSliderWidget(
+                  percentage: imageProcessorState?.percentage ?? 0,
+                  remaining: imageProcessorState?.remaining ?? 0,
+                  // onPressed: () => gotoResultScreen(context),
+                  onPressed: () => gotoInputPage(context),
+                ),
               ),
-              const ResultGridViewWidget(),
+              const Expanded(child: ResultGridViewWidget()),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  void gotoResultScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ResultScreen(
-          lccResult: 3.5,
         ),
       ),
     );
@@ -111,7 +106,7 @@ class HomePage extends ConsumerWidget {
 AppBar getAppBar({
   required String title,
   Color backgroundColor = ColorConstants.primaryGreen,
-  IconThemeData? iconTheme,
+  IconThemeData? iconTheme = const IconThemeData(color: Colors.white),
 }) {
   return AppBar(
     centerTitle: true,

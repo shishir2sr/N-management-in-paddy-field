@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:rice_fertile_ai/application/result_notifier_provider.dart';
+import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/infrastructure/land_conversion_service.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
@@ -9,13 +10,14 @@ import 'package:rice_fertile_ai/presentation/result/widgets/amount_of_land_text_
 import 'package:rice_fertile_ai/presentation/result/widgets/land_conversion_selection_widget.dart';
 
 class LandInputPage extends ConsumerWidget {
-  LandInputPage({super.key});
+  LandInputPage({super.key})
+      : landInputTextEditingController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController landInputTextEditingController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final resultNotifier = ref.read(resultNotifierProvider.notifier);
-    final resultState = ref.watch(resultNotifierProvider);
 
     final List<LandConversionStrategy> conversionStrategies = [
       ref.read(bighaConverterProvicer),
@@ -41,9 +43,7 @@ class LandInputPage extends ConsumerWidget {
                   Expanded(
                     flex: 4,
                     child: AmountOfLandTextFormField(
-                      onSaved: (p0) {
-                        logger.d('Amount of land: $p0');
-                      },
+                      controller: landInputTextEditingController,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -55,18 +55,30 @@ class LandInputPage extends ConsumerWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 30),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: ColorConstants.primaryGreen,
+                ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    logger.d(
+                        "Land Input Page: ${landInputTextEditingController.text}");
+                    final landAmount =
+                        num.parse(landInputTextEditingController.text)
+                            .toDouble();
+                    resultNotifier.calculateNitrogenRequirement(
+                        landAmount: landAmount);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ResultScreen(lccResult: 7),
+                        builder: (context) => const ResultScreen(),
                       ),
                     );
                   }
                 },
-                child: const Text('Submit'),
+                child: const Text('Get Recommendation'),
               ),
             ],
           ),
