@@ -1,12 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:rice_fertile_ai/Utils/app_icons.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }

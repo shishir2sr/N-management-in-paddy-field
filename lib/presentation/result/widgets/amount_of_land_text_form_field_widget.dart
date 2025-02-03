@@ -17,28 +17,28 @@ class AmountOfLandTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       onSaved: onSaved,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: 'Enter amount of land',
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: Colors.grey,
           fontSize: 14.0,
           fontFamily: AppFonts.MANROPE,
         ),
         labelText: "Amount of Land *",
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: Colors.black,
           fontSize: 16.0,
           fontFamily: AppFonts.MANROPE,
         ),
         helperMaxLines: 2,
-        border: const OutlineInputBorder(
+        border: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0)),
           borderSide: BorderSide(
             color: ColorConstants.secondaryGreen,
             style: BorderStyle.solid,
           ),
         ),
-        focusedBorder: const OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0)),
           borderSide: BorderSide(
             color: ColorConstants.secondaryGreen,

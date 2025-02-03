@@ -43,12 +43,12 @@ class LandInputPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // add a image widget here to show the land image
-                Container(
+                SizedBox(
                   height: 200,
                   width: 200,
                   child: Image.asset('assets/images/paddy.png'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
@@ -59,7 +59,7 @@ class LandInputPage extends ConsumerWidget {
                 LandConversionSelectionWidget(
                   dropdownItemList: _getDropDownItems(conversionStrategies),
                 ),
-                Spacer(),
+                const Spacer(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -67,7 +67,7 @@ class LandInputPage extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    minimumSize: Size(double.infinity, 50),
+                    minimumSize: const Size(double.infinity, 50),
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -92,7 +92,7 @@ class LandInputPage extends ConsumerWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w600)),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
               ],

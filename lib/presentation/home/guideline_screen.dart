@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:rice_fertile_ai/Utils/app_fonts.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 
 class GuidelineScreen extends StatelessWidget {
-  const GuidelineScreen({Key? key}) : super(key: key);
+  const GuidelineScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class GuidelineScreen extends StatelessWidget {
         backgroundColor: ColorConstants.primaryGreen,
       ),
       body: const Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -50,7 +49,7 @@ class GuidelineScreen extends StatelessWidget {
 class BulletPoint extends StatelessWidget {
   final String text;
 
-  const BulletPoint({Key? key, required this.text}) : super(key: key);
+  const BulletPoint({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

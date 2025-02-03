@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:rice_fertile_ai/presentation/home/splash_screen.dart';
 
 void main() {
@@ -24,7 +22,7 @@ class RiceFertileAi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'RiceFertile AI',
       home: SplashScreen(),

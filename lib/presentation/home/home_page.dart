@@ -15,7 +15,6 @@ import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.d
 import 'package:rice_fertile_ai/presentation/home/widgets/radial_slider_widget.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/resut_gridview_widget.dart';
 import 'package:rice_fertile_ai/presentation/result/input_page.dart';
-import 'package:tflite_flutter/src/interpreter.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -140,7 +139,7 @@ class HomePage extends ConsumerWidget {
       SnackBar(
         content: Text(
           message,
-          style: TextStyle(fontFamily: AppFonts.MANROPE),
+          style: const TextStyle(fontFamily: AppFonts.MANROPE),
         ),
         backgroundColor: Colors.red,
       ),
