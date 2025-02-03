@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/Utils/app_fonts.dart';
 import 'package:rice_fertile_ai/application/result_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
@@ -26,61 +27,76 @@ class LandInputPage extends ConsumerWidget {
       ref.read(shotokConverterProvicer),
       ref.read(kathaConverterProvicer),
     ];
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: getAppBar(title: "Land Input"),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: AmountOfLandTextFormField(
-                      controller: landInputTextEditingController,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 3,
-                    child: LandConversionSelectionWidget(
-                      dropdownItemList: _getDropDownItems(conversionStrategies),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: ColorConstants.primaryGreen,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: getAppBar(title: "Land Input"),
+        body: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // add a image widget here to show the land image
+                Container(
+                  height: 200,
+                  width: 200,
+                  child: Image.asset('assets/images/paddy.png'),
                 ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    logger.d(
-                        "Land Input Page: ${landInputTextEditingController.text}");
-                    final landAmount =
-                        num.parse(landInputTextEditingController.text)
-                            .toDouble();
-                    resultNotifier.calculateNitrogenRequirement(
-                        landAmount: landAmount);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ResultScreen(),
-                      ),
-                    );
-                  }
-                },
-                child: const Text('Get Recommendation'),
-              ),
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+
+                AmountOfLandTextFormField(
+                  controller: landInputTextEditingController,
+                ),
+                const SizedBox(height: 20),
+                LandConversionSelectionWidget(
+                  dropdownItemList: _getDropDownItems(conversionStrategies),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: ColorConstants.primaryGreen,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    minimumSize: Size(double.infinity, 50),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      logger.d(
+                          "Land Input Page: ${landInputTextEditingController.text}");
+                      final landAmount =
+                          num.parse(landInputTextEditingController.text)
+                              .toDouble();
+                      resultNotifier.calculateNitrogenRequirement(
+                          landAmount: landAmount);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ResultScreen(),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text('Get Recommendation',
+                      style: TextStyle(
+                          fontFamily: AppFonts.MANROPE,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600)),
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
           ),
         ),
       ),

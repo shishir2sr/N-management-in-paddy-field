@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rice_fertile_ai/Utils/app_fonts.dart';
 
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 
@@ -16,20 +17,32 @@ class AmountOfLandTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       onSaved: onSaved,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Enter amount of land',
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Colors.grey,
-          fontSize: 12.0,
-          letterSpacing: 2,
+          fontSize: 14.0,
+          fontFamily: AppFonts.MANROPE,
         ),
         labelText: "Amount of Land *",
+        labelStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 16.0,
+          fontFamily: AppFonts.MANROPE,
+        ),
         helperMaxLines: 2,
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(16.0)),
           borderSide: BorderSide(
             color: ColorConstants.secondaryGreen,
             style: BorderStyle.solid,
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+          borderSide: BorderSide(
+            color: ColorConstants.secondaryGreen,
+            width: 2.0,
           ),
         ),
         floatingLabelBehavior: FloatingLabelBehavior.always,

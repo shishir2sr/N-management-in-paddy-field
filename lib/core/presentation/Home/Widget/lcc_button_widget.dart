@@ -22,6 +22,7 @@ class LccButtonWidget extends StatelessWidget {
       onPressed: onPressFunction,
       style: ElevatedButton.styleFrom(
           side: borderSide,
+          overlayColor: Colors.green,
           shape: const CircleBorder(),
           padding: const EdgeInsets.all(8),
           minimumSize: const Size(60, 60),

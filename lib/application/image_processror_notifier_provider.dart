@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/domain/segmentation_result.dart';
 import 'package:rice_fertile_ai/infrastructure/image_analysis_repository.dart';
@@ -58,8 +59,43 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
     return result;
   }
 
+  Future<SegmentationResult?> pickImageFromGallery(
+      {required Interpreter? interpreter}) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile == null || interpreter == null) {
+      logger.e('No image selected or interpreter is null');
+      state = AsyncError("Error", StackTrace.current);
+      return null;
+    }
+
+    Uint8List imageBytes = await pickedFile.readAsBytes();
+
+    // Process the image (remove background)
+    final SegmentationResult? result = await _removeBackgroundFromImage(
+      imageBytes: imageBytes,
+      interpreter: interpreter,
+    );
+
+    if (result == null) {
+      logger.e('Error processing image from gallery');
+      state = AsyncError('Error processing image', StackTrace.current);
+    } else {
+      state = AsyncData(state.value!);
+    }
+    return result;
+  }
+
   void resetPrediction() {
     state = AsyncData(ImageProcessorState.initial());
+  }
+
+  void removeImage(int index) {
+    final updatedLccResult = List<int>.from(state.value!.lccResult)
+      ..removeAt(index);
+    state = AsyncData(ImageProcessorState(lccResult: updatedLccResult));
   }
 
   Future<Uint8List?> _captureImage({

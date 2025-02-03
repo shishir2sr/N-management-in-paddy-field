@@ -57,9 +57,9 @@ class ResultStateNotifier extends Notifier<ResultState> {
   String _getRecommendation({required double averageLcc}) {
     if (averageLcc <= 3.5) {
       double ureaRequired = state.landAmountInBigha * 0.227273;
-      return "Recommended Urea: ${ureaRequired.toStringAsFixed(2)} kg";
+      return "Recommended\nUrea:\n${ureaRequired.toStringAsFixed(2)} kg";
     } else {
-      return "Good nitrogen level! \n try again in 10 days later";
+      return "Good nitrogen level!\ntry again in 10 days later";
     }
   }
 

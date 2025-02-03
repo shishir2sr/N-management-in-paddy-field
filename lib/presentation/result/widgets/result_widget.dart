@@ -34,7 +34,7 @@ class ResultWidget extends StatelessWidget {
 
 TextStyle resultTextStyle = const TextStyle(
   fontSize: 20,
-  fontWeight: FontWeight.bold,
+  fontWeight: FontWeight.w600,
   color: ColorConstants.primaryGreen,
   shadows: [
     Shadow(
