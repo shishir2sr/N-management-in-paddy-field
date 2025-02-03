@@ -1,4 +1,4 @@
-package com.example.rice_fertile_ai
+package com.just.LCC
 
 import io.flutter.embedding.android.FlutterActivity
 
