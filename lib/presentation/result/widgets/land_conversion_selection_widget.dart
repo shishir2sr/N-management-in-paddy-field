@@ -23,6 +23,13 @@ class LandConversionSelectionWidget extends ConsumerWidget {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: const BorderSide(
+            color: Colors.green,
+            width: 2,
+          ),
+        ),
         // Add more decoration..
       ),
       value: resultState.selectedStrategy,

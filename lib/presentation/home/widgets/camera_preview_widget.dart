@@ -13,17 +13,21 @@ class CameraPreviewWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.only(top: 26),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (controller != null)
-            Center(
-              child: CameraPreview(
-                controller!,
+      padding: const EdgeInsets.only(
+        top: 26,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (controller != null)
+              Center(
+                child: CameraPreview(
+                  controller!,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

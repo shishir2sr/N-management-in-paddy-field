@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rice_fertile_ai/Utils/app_fonts.dart';
 import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/presentation/home/widgets/next_button_widget.dart';
 
@@ -27,7 +28,7 @@ class RadialSliderWidget extends StatelessWidget {
               maximum: 10,
               showLabels: false,
               showTicks: false,
-              radiusFactor: 0.65,
+              radiusFactor: 0.7,
               axisLineStyle: const AxisLineStyle(
                 cornerStyle: CornerStyle.bothCurve,
                 color: Colors.black12,
@@ -77,8 +78,8 @@ class RadialSliderWidget extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Colors.white,
                     ),
-                    height: deviceWidth * 0.45,
-                    width: deviceWidth * 0.45,
+                    height: deviceWidth * 0.5,
+                    width: deviceWidth * 0.5,
                     child: Center(
                       child: remaining > 0
                           ? Column(
@@ -90,16 +91,22 @@ class RadialSliderWidget extends StatelessWidget {
                                     fontSize: 52,
                                     fontWeight: FontWeight.bold,
                                     color: ColorConstants.primaryGreen,
+                                    fontFamily: AppFonts.MANROPE,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  'Remaining Leaves',
+                                  remaining == 1
+                                      ? "Remaining\nLeaf"
+                                      : 'Remaining\nLeaves',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.black.withOpacity(0.5),
+                                    fontFamily: AppFonts.MANROPE,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             )

@@ -28,6 +28,10 @@
 	<string>This app requires camera access to capture images of rice fields for analysis and provide fertility recommendations</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires microphone access to record audio notes about rice field conditions for better analysis and recommendations.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>The app needs access to your photo library to allow you to save captured photos so that they are never lost.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>The app needs access to your photo library to allow you to select a paddy image for scanning.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
