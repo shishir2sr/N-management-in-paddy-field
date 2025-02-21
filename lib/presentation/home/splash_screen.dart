@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future checkIfAlreadyHovered() async {
     var pref = await SharedPreferences.getInstance();
-    var hovered = pref.getBool('hoveredX') ?? false;
+    var hovered = pref.getBool('hovered') ?? false;
     return hovered;
   }
 
