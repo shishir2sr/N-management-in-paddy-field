@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/Utils/app_fonts.dart';
 import 'package:rice_fertile_ai/application/result_notifier_provider.dart';
+import 'package:rice_fertile_ai/core/shared/color_constants.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:rice_fertile_ai/presentation/result/widgets/result_widget.dart';
 
@@ -15,12 +17,48 @@ class ResultScreen extends ConsumerWidget {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: getAppBar(title: "Recommendation"),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Center(
-          child: ResultWidget(
-            resultText: recommendation,
-          ),
+      body: Container(
+        margin: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Spacer(),
+            Center(
+              child: ResultWidget(
+                resultText: recommendation,
+              ),
+            ),
+            Spacer(),
+            Container(
+              height: 60, // Set height
+              decoration: BoxDecoration(
+                color: ColorConstants.primaryGreen,
+                borderRadius: BorderRadius.circular(10), // Rounded corners
+              ),
+              child: InkWell(
+                borderRadius:
+                    BorderRadius.circular(20), // Match container's borderRadius
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: const Center(
+                  child: Text(
+                    'Done',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontFamily: AppFonts.MANROPE),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

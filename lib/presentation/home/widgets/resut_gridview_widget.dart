@@ -195,8 +195,8 @@ class ResultGridViewWidget extends ConsumerWidget {
                 ),
               ),
               Positioned(
-                top: 0,
-                right: 5,
+                top: -1,
+                right: 2,
                 child: InkWell(
                   onTap: () {
                     imageProcessorStateNotifier.removeImage(index);

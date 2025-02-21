@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:rice_fertile_ai/Utils/app_icons.dart';
 import 'package:rice_fertile_ai/presentation/home/home_page.dart';
+import 'package:rice_fertile_ai/presentation/home/slider_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,13 +24,24 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     // Simulate a delay before navigating to the next screen
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoaderOverlay(child: HomePage()),
-        ),
-      );
+      if (mounted) {
+        checkIfAlreadyHovered().then((isAlreadyHovered) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoaderOverlay(
+                  child: isAlreadyHovered ? const HomePage() : SliderPage()),
+            ),
+          );
+        });
+      }
     });
+  }
+
+  Future checkIfAlreadyHovered() async {
+    var pref = await SharedPreferences.getInstance();
+    var hovered = pref.getBool('hoveredX') ?? false;
+    return hovered;
   }
 
   @override
