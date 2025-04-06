@@ -4,9 +4,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/Utils/result_details_model.dart';
-import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/presentation/home/splash_screen.dart';
+import 'package:LCC/Utils/result_details_model.dart';
+import 'package:LCC/core/shared/logging_service.dart';
+import 'package:LCC/presentation/home/splash_screen.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();

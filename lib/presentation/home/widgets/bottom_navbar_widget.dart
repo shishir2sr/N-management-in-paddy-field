@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rice_fertile_ai/core/presentation/Home/Widget/lcc_button_widget.dart';
-import 'package:rice_fertile_ai/core/shared/color_constants.dart';
-import 'package:rice_fertile_ai/core/shared/lcc_icons.dart';
+import 'package:LCC/core/presentation/Home/Widget/lcc_button_widget.dart';
+import 'package:LCC/core/shared/color_constants.dart';
+import 'package:LCC/core/shared/lcc_icons.dart';
 
 class BottomNavBar extends StatelessWidget {
   final OnPressCallBackFunction selectFromCamera;

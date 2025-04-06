@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/bottom_navbar_widget.dart';
+import 'package:LCC/presentation/home/widgets/bottom_navbar_widget.dart';
 
 class ImageSelectionPlaceholderWidget extends StatelessWidget {
   const ImageSelectionPlaceholderWidget({

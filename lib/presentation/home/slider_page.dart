@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:rice_fertile_ai/Utils/app_fonts.dart';
-import 'package:rice_fertile_ai/Utils/app_icons.dart';
-import 'package:rice_fertile_ai/presentation/home/home_page.dart';
+import 'package:LCC/Utils/app_fonts.dart';
+import 'package:LCC/Utils/app_icons.dart';
+import 'package:LCC/presentation/home/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderPage extends StatefulWidget {

@@ -3,11 +3,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/Utils/result_details_model.dart';
-import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
-import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/infrastructure/land_conversion_service.dart';
-import 'package:rice_fertile_ai/main.dart';
+import 'package:LCC/Utils/result_details_model.dart';
+import 'package:LCC/application/image_processror_notifier_provider.dart';
+import 'package:LCC/core/shared/logging_service.dart';
+import 'package:LCC/infrastructure/land_conversion_service.dart';
+import 'package:LCC/main.dart';
 import 'package:timezone/timezone.dart';
 part 'result_notifier_provider.freezed.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rice_fertile_ai/domain/image_type.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/glassmorphic_container.dart';
+import 'package:LCC/domain/image_type.dart';
+import 'package:LCC/presentation/home/widgets/glassmorphic_container.dart';
 
 class ImagePreviewWidget extends StatelessWidget {
   const ImagePreviewWidget({

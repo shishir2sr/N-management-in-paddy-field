@@ -3,8 +3,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/application/result_notifier_provider.dart';
-import 'package:rice_fertile_ai/infrastructure/land_conversion_service.dart';
+import 'package:LCC/application/result_notifier_provider.dart';
+import 'package:LCC/infrastructure/land_conversion_service.dart';
 
 class LandConversionSelectionWidget extends ConsumerWidget {
   final List<DropdownMenuItem<LandConversionStrategy>> dropdownItemList;

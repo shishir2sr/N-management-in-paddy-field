@@ -3,9 +3,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:rice_fertile_ai/Utils/app_icons.dart';
-import 'package:rice_fertile_ai/presentation/home/home_page.dart';
-import 'package:rice_fertile_ai/presentation/home/slider_page.dart';
+import 'package:LCC/Utils/app_icons.dart';
+import 'package:LCC/presentation/home/home_page.dart';
+import 'package:LCC/presentation/home/slider_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
@@ -30,7 +30,8 @@ class _SplashScreenState extends State<SplashScreen>
             context,
             MaterialPageRoute(
               builder: (context) => LoaderOverlay(
-                  child: isAlreadyHovered ? const HomePage() : SliderPage()),
+                  child:
+                      isAlreadyHovered ? const HomePage() : const SliderPage()),
             ),
           );
         });

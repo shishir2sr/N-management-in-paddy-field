@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/domain/segmentation_result.dart';
-import 'package:rice_fertile_ai/infrastructure/image_analysis_repository.dart';
+import 'package:LCC/core/shared/logging_service.dart';
+import 'package:LCC/domain/segmentation_result.dart';
+import 'package:LCC/infrastructure/image_analysis_repository.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 part 'image_processror_notifier_provider.freezed.dart';
 

@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/domain/typedefs.dart';
+import 'package:LCC/core/shared/logging_service.dart';
+import 'package:LCC/domain/typedefs.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 abstract class InterpreterManager {

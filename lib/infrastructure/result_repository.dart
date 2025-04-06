@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/infrastructure/land_conversion_service.dart';
+import 'package:LCC/infrastructure/land_conversion_service.dart';
 
 class ResultRepository {
   final LandConversionStrategy _bighaConverter;

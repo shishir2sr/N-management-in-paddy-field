@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rice_fertile_ai/Utils/app_fonts.dart';
+import 'package:LCC/Utils/app_fonts.dart';
 
-import 'package:rice_fertile_ai/core/shared/color_constants.dart';
+import 'package:LCC/core/shared/color_constants.dart';
 
 class AmountOfLandTextFormField extends StatelessWidget {
   const AmountOfLandTextFormField({

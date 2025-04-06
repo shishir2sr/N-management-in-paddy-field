@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rice_fertile_ai/core/shared/color_constants.dart';
+import 'package:LCC/core/shared/color_constants.dart';
 
 import 'circle_widget.dart';
 

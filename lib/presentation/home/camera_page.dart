@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
-import 'package:rice_fertile_ai/core/shared/color_constants.dart';
-import 'package:rice_fertile_ai/core/shared/string_constants.dart';
-import 'package:rice_fertile_ai/domain/segmentation_result.dart';
-import 'package:rice_fertile_ai/infrastructure/camera_datasource.dart';
-import 'package:rice_fertile_ai/infrastructure/tflite_service.dart';
-import 'package:rice_fertile_ai/presentation/home/home_page.dart';
-import 'package:rice_fertile_ai/presentation/home/image_preview_page.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/camera_preview_widget.dart';
-import 'package:rice_fertile_ai/presentation/home/widgets/camera_screen_bottom_bar_widget.dart';
+import 'package:LCC/application/image_processror_notifier_provider.dart';
+import 'package:LCC/core/shared/color_constants.dart';
+import 'package:LCC/core/shared/string_constants.dart';
+import 'package:LCC/domain/segmentation_result.dart';
+import 'package:LCC/infrastructure/camera_datasource.dart';
+import 'package:LCC/infrastructure/tflite_service.dart';
+import 'package:LCC/presentation/home/home_page.dart';
+import 'package:LCC/presentation/home/image_preview_page.dart';
+import 'package:LCC/presentation/home/widgets/camera_preview_widget.dart';
+import 'package:LCC/presentation/home/widgets/camera_screen_bottom_bar_widget.dart';
 
 class CameraPage extends ConsumerWidget {
   const CameraPage({super.key});

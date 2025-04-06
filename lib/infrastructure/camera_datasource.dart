@@ -2,8 +2,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/core/shared/logging_service.dart';
-import 'package:rice_fertile_ai/domain/camera_failure.dart';
+import 'package:LCC/core/shared/logging_service.dart';
+import 'package:LCC/domain/camera_failure.dart';
 
 abstract class CameraDataSource {
   /// Takes a picture using the camera and returns the captured image file.

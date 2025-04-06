@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:rice_fertile_ai/Utils/app_fonts.dart';
-import 'package:rice_fertile_ai/Utils/result_details_model.dart';
-import 'package:rice_fertile_ai/presentation/home/home_page.dart';
+import 'package:LCC/Utils/app_fonts.dart';
+import 'package:LCC/Utils/result_details_model.dart';
+import 'package:LCC/presentation/home/home_page.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
@@ -104,7 +104,7 @@ class HistoryPage extends StatelessWidget {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           DetailsText(
                             text:
                                 'Urea Needed: ${result.ureaNeeded.toStringAsFixed(2)} kg',
@@ -144,12 +144,12 @@ class DetailsText extends StatelessWidget {
   final Color color;
 
   const DetailsText({
-    Key? key,
+    super.key,
     required this.text,
     this.fontSize = 14.0,
     this.fontWeight = FontWeight.w400,
     this.color = Colors.black,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

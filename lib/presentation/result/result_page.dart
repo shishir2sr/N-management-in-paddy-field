@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:rice_fertile_ai/Utils/app_fonts.dart';
-import 'package:rice_fertile_ai/application/result_notifier_provider.dart';
-import 'package:rice_fertile_ai/core/shared/color_constants.dart';
-import 'package:rice_fertile_ai/presentation/home/home_page.dart';
-import 'package:rice_fertile_ai/presentation/result/widgets/result_widget.dart';
+import 'package:LCC/Utils/app_fonts.dart';
+import 'package:LCC/application/result_notifier_provider.dart';
+import 'package:LCC/core/shared/color_constants.dart';
+import 'package:LCC/presentation/home/home_page.dart';
+import 'package:LCC/presentation/result/widgets/result_widget.dart';
 
 // ignore: must_be_immutable
 class ResultScreen extends ConsumerWidget {
@@ -21,13 +21,13 @@ class ResultScreen extends ConsumerWidget {
         margin: const EdgeInsets.all(20),
         child: Column(
           children: [
-            Spacer(),
+            const Spacer(),
             Center(
               child: ResultWidget(
                 resultText: recommendation,
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Container(
               height: 60, // Set height
               decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class ResultScreen extends ConsumerWidget {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => const HomePage(),
                     ),
                     (Route<dynamic> route) => false,
                   );

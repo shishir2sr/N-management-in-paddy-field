@@ -1,8 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:rice_fertile_ai/Utils/app_fonts.dart';
-import 'package:rice_fertile_ai/core/shared/color_constants.dart';
+import 'package:LCC/Utils/app_fonts.dart';
+import 'package:LCC/core/shared/color_constants.dart';
 
 class NextButtonWidget extends StatefulWidget {
   const NextButtonWidget({
