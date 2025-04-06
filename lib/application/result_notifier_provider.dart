@@ -1,9 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:rice_fertile_ai/Utils/result_details_model.dart';
 import 'package:rice_fertile_ai/application/image_processror_notifier_provider.dart';
 import 'package:rice_fertile_ai/core/shared/logging_service.dart';
 import 'package:rice_fertile_ai/infrastructure/land_conversion_service.dart';
+import 'package:rice_fertile_ai/main.dart';
+import 'package:timezone/timezone.dart';
 part 'result_notifier_provider.freezed.dart';
 
 @freezed
@@ -35,14 +40,78 @@ class ResultStateNotifier extends Notifier<ResultState> {
 
   void calculateNitrogenRequirement({required double landAmount}) {
     // set the land amount in bigha
+    String recommendation = "";
     _convertToBigha(landAmount);
     logger.i('Calculating nitrogen requirement');
     final resultList = ref.watch(imageProcessorProvider).value?.lccResult;
     final average = _getResultAverage(resultList!);
     logger.d('Average LCC: $average');
-    final recommendation = _getRecommendation(averageLcc: average);
+    final ureaRequired = _getRecommendation(averageLcc: average);
+
+    if (ureaRequired == 0.0) {
+      recommendation = "Good nitrogen level!";
+      state = state.copyWith(recommendation: recommendation);
+    } else {
+      recommendation =
+          "Recommended\nUrea:\n${ureaRequired.toStringAsFixed(2)} kg";
+    }
+
     state = state.copyWith(recommendation: recommendation);
     logger.i('Recommendation: $recommendation');
+
+    // save the result to the database
+
+    var resultData = ResultStateDetails(
+      landAmountInBigha: state.landAmountInBigha,
+      recommendation: recommendation,
+      date: DateTime.now(),
+      ureaNeeded: ureaRequired,
+      averageLLC: average,
+    );
+
+    saveResultHistory(resultData);
+    setLocalNotification();
+  }
+
+  void setLocalNotification() async {
+    logger.i('Setting local notification');
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      channelDescription: 'your_channel_description', // Channel description
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0, // Notification ID
+      'Nitrogen Requirement Calculated', // Notification title
+      'Check the latest nitrogen requirement details.', // Notification body
+      TZDateTime.now(local)
+          .add(const Duration(minutes: 1)), // Scheduled time (1 minute later)
+      platformChannelSpecifics,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      androidScheduleMode:
+          AndroidScheduleMode.exact, // Match component for accuracy
+    );
+  }
+
+  saveResultHistory(ResultStateDetails resultData) {
+    // save the result to the database
+    logger.i('Saving result to the database');
+
+    // Save the result data in Hive
+    var box = Hive.box<ResultStateDetails>('resultStateBox');
+    box.add(resultData);
   }
 
   // convert the land amount to bigha
@@ -54,12 +123,15 @@ class ResultStateNotifier extends Notifier<ResultState> {
   }
 
   // get the recommendation based on the average LCC
-  String _getRecommendation({required double averageLcc}) {
+  double _getRecommendation({required double averageLcc}) {
     if (averageLcc <= 3.5) {
       double ureaRequired = state.landAmountInBigha * 0.227273;
-      return "Recommended\nUrea:\n${ureaRequired.toStringAsFixed(2)} kg";
+
+      return ureaRequired;
+      // return "Recommended\nUrea:\n${ureaRequired.toStringAsFixed(2)} kg";
     } else {
-      return "Good nitrogen level!\ntry again in 10 days later";
+      return 0.0;
+      // return "Good nitrogen level!\ntry again in 10 days later";
     }
   }
 
