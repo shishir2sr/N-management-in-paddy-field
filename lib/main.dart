@@ -32,11 +32,11 @@ Future<void> main() async {
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
   // iOS initialization
-  final DarwinInitializationSettings initializationSettingsIOS =
+  const DarwinInitializationSettings initializationSettingsIOS =
       DarwinInitializationSettings();
 
   // Full initialization settings
-  final InitializationSettings initializationSettings = InitializationSettings(
+  const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
@@ -53,19 +53,19 @@ Future<void> main() async {
   ]).then((_) {
     runApp(ProviderScope(
       observers: [LogProviderObserver()],
-      child: const RiceFertileAi(),
+      child: const LCCApp(),
     ));
   });
 }
 
-class RiceFertileAi extends StatelessWidget {
-  const RiceFertileAi({super.key});
+class LCCApp extends StatelessWidget {
+  const LCCApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'RiceFertile AI',
+      title: 'LCC',
       home: SplashScreen(),
     );
   }

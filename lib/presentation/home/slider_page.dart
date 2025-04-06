@@ -6,6 +6,8 @@ import 'package:rice_fertile_ai/presentation/home/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderPage extends StatefulWidget {
+  const SliderPage({super.key});
+
   @override
   _SliderPageState createState() => _SliderPageState();
 }
@@ -41,7 +43,7 @@ class _SliderPageState extends State<SliderPage> {
               height: MediaQuery.of(context).size.height,
               viewportFraction: 1.0,
               autoPlay: true,
-              autoPlayAnimationDuration: Duration(seconds: 1),
+              autoPlayAnimationDuration: const Duration(seconds: 1),
               onPageChanged: (index, reason) {
                 setState(() {
                   _currentIndex = index;
@@ -61,17 +63,17 @@ class _SliderPageState extends State<SliderPage> {
           // Content
           SafeArea(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   landingStyles[_currentIndex].titleHeader != null
                       ? Text(
                           landingStyles[_currentIndex].titleHeader!,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -80,25 +82,25 @@ class _SliderPageState extends State<SliderPage> {
                       : Container(),
                   Text(
                     landingStyles[_currentIndex].title,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontFamily: AppFonts.MANROPE),
                     textAlign: TextAlign.center,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: _buildDots(),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Center(
                     child: Container(
                       child: Text(
                         landingStyles[_currentIndex].description,
                         maxLines: 3,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -107,7 +109,7 @@ class _SliderPageState extends State<SliderPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
                     height: 60, // Set height
                     decoration: BoxDecoration(
@@ -124,12 +126,12 @@ class _SliderPageState extends State<SliderPage> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomePage(),
+                            builder: (context) => const HomePage(),
                           ),
                           (Route<dynamic> route) => false,
                         );
                       },
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Proceed',
                           style: TextStyle(
@@ -141,7 +143,7 @@ class _SliderPageState extends State<SliderPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -157,7 +159,7 @@ class _SliderPageState extends State<SliderPage> {
       (index) => Container(
         width: 10,
         height: 10,
-        margin: EdgeInsets.symmetric(horizontal: 5),
+        margin: const EdgeInsets.symmetric(horizontal: 5),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: _currentIndex == index
@@ -187,10 +189,10 @@ class LandingStyle {
 
 final landingStyle1 = LandingStyle(
   titleHeader: "Welcome to",
-  title: 'Rice Fertile AI',
+  title: 'LCC AI',
   description:
       'Empowering farmers with cutting-edge technology. Snap a picture of your paddy leaf and let our AI determine the precise amount of fertilizer your field needs to thrive.',
-  buttonColor: Color(0xFFCAA204),
+  buttonColor: const Color(0xFFCAA204),
   backgroundImage: AppIcons.bg1,
 );
 
@@ -199,7 +201,7 @@ final landingStyle2 = LandingStyle(
   title: 'Get Precise Fertilizer Recommendations',
   description:
       'Unleash the power of AI to optimize your farming. Simply capture an image of your paddy leaf, and our intelligent system will calculate the exact fertilizer requirements, ensuring the best yield from your fields.',
-  buttonColor: Color(0xFF91AC00),
+  buttonColor: const Color(0xFF91AC00),
   backgroundImage: AppIcons.bg2,
 );
 
@@ -208,6 +210,6 @@ final landingStyle3 = LandingStyle(
   title: 'Timely Reminders for Leaf Inspections',
   description:
       'Ensure top productivity with timely reminders. Our app will notify you when it\'s time to check your soil and leaves again, helping you maintain the optimal health of your crops.',
-  buttonColor: Color(0xFFE58E14),
+  buttonColor: const Color(0xFFE58E14),
   backgroundImage: AppIcons.bg3,
 );
