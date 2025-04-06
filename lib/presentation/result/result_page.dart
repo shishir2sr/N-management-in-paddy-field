@@ -1,3 +1,4 @@
+import 'package:LCC/application/image_processror_notifier_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:LCC/Utils/app_fonts.dart';
@@ -38,6 +39,8 @@ class ResultScreen extends ConsumerWidget {
                 borderRadius:
                     BorderRadius.circular(20), // Match container's borderRadius
                 onTap: () {
+                  ref.invalidate(resultNotifierProvider);
+                  ref.invalidate(imageProcessorProvider);
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
