@@ -1,17 +1,13 @@
 workflows:
-  build_android:
-    name: Build Android APK
-    max_build_duration: 60
+  android-build:
+    name: Android Build
     environment:
       flutter: stable
-      vars:
-        LC_ALL: en_US.UTF-8
+      android-sdk-components: 
+        - "build-tools;34.0.0" 
+        - "platforms;android-34" 
     scripts:
-      - name: Clean previous builds
-        script: flutter clean
-      - name: Get dependencies
-        script: flutter pub get
-      - name: Build APK
-        script: flutter build apk --no-daemon
+      - flutter pub get
+      - flutter build appbundle --release 
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/bundle/release/*.aab
