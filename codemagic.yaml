@@ -3,11 +3,25 @@ workflows:
     name: Android Build
     environment:
       flutter: stable
+      - keystore_reference
       android-sdk-components: 
         - "build-tools;34.0.0" 
         - "platforms;android-34" 
     scripts:
-      - flutter pub get
-      - flutter build appbundle --release 
+    - name: Set up local.properties
+      script: | 
+        echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+    - name: Get Flutter packages
+      script: | 
+        flutter pub get
+    - name: Build AAB with Flutter
+      script: | 
+        flutter build appbundle --release
     artifacts:
-      - build/app/outputs/bundle/release/*.aab
+    - build/**/outputs/**/*.aab
+    - build/**/outputs/**/mapping.txt
+    - flutter_drive.log
+     
+  
+    
+        
