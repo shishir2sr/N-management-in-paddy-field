@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/tusher/Development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/tusher/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Volumes/Development/Other/LCC/N-management-in-paddy-field/android/app/.cxx/Debug/421s2x2b/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/tusher/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Volumes/Development/Other/LCC/N-management-in-paddy-field/android/app/.cxx/Debug/421s2x2b/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
