@@ -1,0 +1,2 @@
+/Volumes/Development/Other/LCC/N-management-in-paddy-field/android/app/.cxx/RelWithDebInfo/6b1b304m/x86_64/CMakeFiles/edit_cache.dir
+/Volumes/Development/Other/LCC/N-management-in-paddy-field/android/app/.cxx/RelWithDebInfo/6b1b304m/x86_64/CMakeFiles/rebuild_cache.dir
