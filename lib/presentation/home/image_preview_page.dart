@@ -31,7 +31,6 @@ class _ImagePreviewPageState extends ConsumerState<ImagePreviewPage> {
   int _result = -1;
   @override
   void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
     super.initState();
     _init();
   }
