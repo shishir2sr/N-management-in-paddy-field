@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:LCC/Utils/app_fonts.dart';
 import 'package:LCC/Utils/result_details_model.dart';
+import 'package:LCC/core/shared/hive_boxes.dart';
 import 'package:LCC/presentation/home/home_page.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -45,7 +45,7 @@ class HistoryPage extends StatelessWidget {
       ),
       body: ValueListenableBuilder<Box<ResultStateDetails>>(
         valueListenable:
-            Hive.box<ResultStateDetails>('resultStateBox').listenable(),
+            Hive.box<ResultStateDetails>(HiveBoxes.resultState).listenable(),
         builder: (context, box, _) {
           if (box.isEmpty) {
             return const Center(
@@ -53,23 +53,27 @@ class HistoryPage extends StatelessWidget {
             );
           }
 
-          final itemCount = box.length;
+          // Snapshot the keys, newest first. Deleting by key rather than by
+          // position is what makes a rapid second swipe safe: `deleteAt` uses a
+          // position captured at build time, and Hive positions shift on every
+          // delete — so two quick swipes removed the wrong row, or threw
+          // RangeError on the last one.
+          final keys = box.keys.toList().reversed.toList();
+
           return ListView.builder(
-            itemCount: itemCount,
+            itemCount: keys.length,
             itemBuilder: (context, index) {
-              final reverseIndex = itemCount - 1 - index;
-              final result = box.getAt(reverseIndex);
+              final key = keys[index];
+              final result = box.get(key);
               if (result == null) return const SizedBox.shrink();
 
               final timeAgo = _formatTimeAgo(result.date);
 
               return Dismissible(
-                key: Key(result.key
-                    .toString()), // Use a unique key for the Dismissible
+                key: ValueKey(key),
                 direction: DismissDirection.endToStart, // Right to left swipe
                 onDismissed: (direction) {
-                  box.deleteAt(
-                      reverseIndex); // Delete the item from the Hive box
+                  box.delete(key);
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Item deleted')),
                   );

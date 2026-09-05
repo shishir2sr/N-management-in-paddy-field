@@ -23,10 +23,28 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+// Local release signing credentials. Gitignored — see key.properties.example.
+// The password used to be hardcoded in this file and is therefore in git
+// history, so the signing key it protects must be rotated.
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader("UTF-8") { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+
+// CI=true is exported by Codemagic.
+def hasCiSigning = System.getenv()["CI"] && System.getenv()["CM_KEYSTORE_PATH"]
+def hasReleaseSigning = hasCiSigning || keystorePropertiesFile.exists()
+
 android {
     namespace = "com.just.LCC"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"
+    // Declaring abiFilters below makes Gradle resolve the NDK, so this has to
+    // name a version that is actually installed (or downloadable). The previous
+    // pin, 27.0.12077973, was never resolved because nothing consumed it.
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
     sourceCompatibility JavaVersion.VERSION_11
@@ -47,33 +65,55 @@ android {
         applicationId = "com.just.LCC"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        // Android 8.0. The two TFLite models total ~40 MB on disk and their
+        // tensor arenas are considerably larger again.
         minSdk = 26
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+        ndk {
+            // 64-bit ARM only. 32-bit (armeabi-v7a) devices cannot address
+            // enough memory for the models plus their arenas, and are exactly
+            // the low-RAM hardware that was being killed mid-capture. Play
+            // Store filters installs on this automatically.
+            //
+            // Add 'x86_64' here if you need to run on an Intel-host emulator.
+            abiFilters 'arm64-v8a'
+        }
     }
     signingConfigs {
-        release {
-            if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
-                  storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
-                  storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
-                  keyAlias System.getenv()["CM_KEY_ALIAS"]
-                  keyPassword System.getenv()["CM_KEY_PASSWORD"]
-              } else {
-                  storeFile file("upload-keystore.jks")
-                  storePassword "177544"
-                  keyAlias "upload"
-                  keyPassword "177544"
-              }
-        } 
+        if (hasReleaseSigning) {
+            release {
+                if (hasCiSigning) {
+                    storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
+                    storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+                    keyAlias System.getenv()["CM_KEY_ALIAS"]
+                    keyPassword System.getenv()["CM_KEY_PASSWORD"]
+                } else {
+                    // Read from the gitignored key.properties. Credentials must
+                    // never be committed — the previous hardcoded password is
+                    // permanently in this repo's history, so that key has to be
+                    // rotated.
+                    storeFile file(keystoreProperties["storeFile"])
+                    storePassword keystoreProperties["storePassword"]
+                    keyAlias keystoreProperties["keyAlias"]
+                    keyPassword keystoreProperties["keyPassword"]
+                }
+            }
+        }
     }
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.release
-            minifyEnabled false
-            shrinkResources false
+            // Falls back to the debug key when no release credentials are
+            // configured, so `flutter build apk --release` still works for
+            // local verification. AGP rejects a signingConfig that is
+            // referenced but has no storeFile, so this must be conditional.
+            signingConfig = hasReleaseSigning
+                    ? signingConfigs.release
+                    : signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }

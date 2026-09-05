@@ -1,119 +1,99 @@
-import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:LCC/core/shared/logging_service.dart';
-import 'package:LCC/domain/camera_failure.dart';
+import 'package:LCC/domain/analysis_failure.dart';
 import 'package:LCC/domain/segmentation_result.dart';
-import 'package:LCC/domain/typedefs.dart';
 import 'package:LCC/infrastructure/camera_datasource.dart';
-import 'package:LCC/infrastructure/image_processing_service.dart';
-import 'package:LCC/infrastructure/tflite_service.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:image/image.dart' as img;
+import 'package:LCC/infrastructure/inference/inference_isolate_client.dart';
+import 'package:LCC/infrastructure/inference/inference_providers.dart';
 
+/// Captures an image and runs it through the inference isolate.
+///
+/// Only file paths cross into the isolate, so a full-resolution JPEG is never
+/// held on the UI isolate's heap, and no `Interpreter` is ever passed around.
 class ImageAnalysisRepository {
+  ImageAnalysisRepository(this._cameraService, this._inference);
+
   final CameraDataSource _cameraService;
-  final ModelRunner _tfliteModelRunner;
-  final ImageProcessingService _imgProcessor;
+  final InferenceIsolateClient _inference;
 
-  ImageAnalysisRepository(
-    this._cameraService,
-    this._tfliteModelRunner,
-    this._imgProcessor,
-  );
-
-  Future<Either<CameraFailure, Uint8List>> takePicture(
-      {required CameraController controller,
-      required Interpreter interpreter}) async {
+  Future<Either<AnalysisFailure, SegmentationResult>> captureAndAnalyze({
+    required CameraController controller,
+  }) async {
+    final XFile captured;
     try {
-      // * Take picture from camera
-      final XFile xFileImage =
-          await _cameraService.takePicture(controller: controller);
-
-      logger.i('[Repository] Returning image bytes');
-      final Uint8List imageBytes = await xFileImage.readAsBytes();
-
-      return right(imageBytes);
+      captured = await _cameraService.takePicture(controller: controller);
+    } on AnalysisFailure catch (failure) {
+      return left(failure);
     } on CameraException catch (e) {
-      return left(
-          CameraFailure.cameraException(e.description ?? 'Unknown Error!'));
-    } on CameraInitializationException catch (e) {
-      return left(CameraFailure.cameraException(e.message));
+      return left(CameraFailure(e.description ?? e.code));
+    } catch (e, st) {
+      logger.e('Unexpected capture failure', error: e, stackTrace: st);
+      return left(const CameraFailure('Could not capture the photo.'));
     }
+
+    return analyzeImageAt(
+      imagePath: captured.path,
+      // The camera plugin writes to the cache directory and never cleans up.
+      deleteSourceWhenDone: true,
+    );
   }
 
-  Future<Either<String, SegmentationResult>> removeBackgroundFromImage({
-    required Uint8List imageBytes,
-    required Interpreter interpreter,
+  Future<Either<AnalysisFailure, SegmentationResult>> analyzeImageAt({
+    required String imagePath,
+    bool deleteSourceWhenDone = false,
   }) async {
     try {
-      // * Prepare Input Tensor
-      final imageReshaped =
-          _imgProcessor.getReshapedImage(imageData: imageBytes);
-      final imageReshapedBytes = Uint8List.fromList(
-          img.encodePng(imageReshaped)); // this will return as original image
-      final inputTensor = _imgProcessor.getInputTensor(image: imageReshaped);
-
-      // * Prepare Output Tesnsor
-      final outputTensor = _imgProcessor.getSegmentationModelsOutputTensor();
-
-      // * Run PreProcessor Model
-      final segmentationTensor = await _tfliteModelRunner.runPreProcessorModel(
-        interpreter: interpreter,
-        input: inputTensor,
-        output: outputTensor,
+      final result = await _inference.analyze(
+        imagePath,
+        deleteSourceWhenDone: deleteSourceWhenDone,
       );
 
-      // * Apply Segmentation Mask
-      final outputImage = _imgProcessor.applySegmentationMask(
-        originalImage: imageReshaped,
-        outputTensor: segmentationTensor!,
-      );
+      logger.i('Analysis finished in ${result.elapsedMs}ms — '
+          'LCC ${result.lccLabel}');
+
       return right(SegmentationResult(
-        originalImage: imageReshapedBytes,
-        outputImage: outputImage,
+        originalImage: result.originalPng,
+        outputImage: result.maskedPng,
+        lccLabel: result.lccLabel,
       ));
-    } catch (e) {
-      logger.e('Error removing background: ${e.toString()}');
-      return left('Error removing background');
+    } on InferenceException catch (e) {
+      logger.e('Inference failed: $e');
+      return left(ProcessingFailure(
+        _userMessageFor(e),
+        stage: e.stage,
+      ));
+    } catch (e, st) {
+      logger.e('Unexpected analysis failure', error: e, stackTrace: st);
+      return left(const ProcessingFailure(
+        'Could not analyse this image. Please try again.',
+      ));
     }
   }
 
-  // * test classification model
-  Future<Either<String, int>> runClassificatinModel({
-    required Interpreter interpreter,
-    required Uint8List input,
-  }) async {
-    // * Prepare Input Tensor
-    img.Image? image = img.decodeImage(Uint8List.fromList(input));
-    if (image == null) return left('Image cannot be decoded');
-    final inputTensor = _imgProcessor.getInputTensor(image: image);
-    Tensor2D outputTensor = [
-      [0.0, 0.0, 0.0, 0.0]
-    ];
-
-    // * Run classification model
-    final result = _tfliteModelRunner.runClassificatinModel(
-      interpreter: interpreter,
-      input: inputTensor,
-      output: outputTensor,
-    );
-    logger.i('result: $result');
-    return right(result);
+  /// Keeps native/FFI detail out of the snackbar while still distinguishing the
+  /// cases a user can act on.
+  String _userMessageFor(InferenceException e) {
+    switch (e.stage) {
+      case 'read':
+        return 'The photo could not be read. Please capture it again.';
+      case 'decode':
+        return 'That image format is not supported. Try a JPEG or PNG photo.';
+      case 'init':
+        return 'The analysis models could not be loaded on this device.';
+      default:
+        return 'Could not analyse this image. Please try again.';
+    }
   }
 }
 
 // * ImageProcessingRepositoryProvider
 final imageProcessingRepositoryProvider =
     Provider<ImageAnalysisRepository>((ref) {
-  final cameraService = ref.watch(cameraDataSourceProvider);
-  final modelRunner = ref.watch(modelRunnerProvider);
-  final imageProcessingService = ref.watch(imageProcessingServiceProvider);
-
   return ImageAnalysisRepository(
-    cameraService,
-    modelRunner,
-    imageProcessingService,
+    ref.watch(cameraDataSourceProvider),
+    ref.watch(inferenceClientProvider),
   );
 });

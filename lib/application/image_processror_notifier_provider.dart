@@ -1,14 +1,19 @@
 import 'dart:async';
+
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:LCC/core/shared/logging_service.dart';
+import 'package:LCC/domain/analysis_failure.dart';
 import 'package:LCC/domain/segmentation_result.dart';
 import 'package:LCC/infrastructure/image_analysis_repository.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
+
 part 'image_processror_notifier_provider.freezed.dart';
+
+/// Number of leaf readings a full assessment needs.
+const int kRequiredReadings = 10;
 
 @freezed
 class ImageProcessorState with _$ImageProcessorState {
@@ -19,73 +24,126 @@ class ImageProcessorState with _$ImageProcessorState {
 
   factory ImageProcessorState.initial() =>
       const ImageProcessorState(lccResult: []);
-  int get remaining => (10 - lccResult.length).toInt();
+
+  int get remaining => kRequiredReadings - lccResult.length;
   double get percentage => lccResult.length.toDouble();
+  bool get isComplete => lccResult.length >= kRequiredReadings;
 }
 
 // * ImageProcessorNotifier
 
 class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
+  /// Guards against a second capture starting while one is in flight. The
+  /// shutter used to fire an unawaited future, so a double tap re-entered
+  /// `takePicture` (→ "Previous capture has not returned yet") and could push
+  /// two preview routes.
+  bool _isBusy = false;
+
+  bool get isBusy => _isBusy;
+
   @override
-  FutureOr<ImageProcessorState> build() {
-    return ImageProcessorState.initial();
+  FutureOr<ImageProcessorState> build() => ImageProcessorState.initial();
+
+  ImageProcessorState get _current => state.value ?? ImageProcessorState.initial();
+
+  /// Sets loading without discarding the readings collected so far.
+  void _beginWork(ImageProcessorState previous) {
+    state = const AsyncLoading<ImageProcessorState>()
+        .copyWithPrevious(AsyncData(previous));
+  }
+
+  void _failWith(AnalysisFailure failure, ImageProcessorState previous) {
+    state = AsyncError<ImageProcessorState>(failure, StackTrace.current)
+        .copyWithPrevious(AsyncData(previous));
   }
 
   Future<SegmentationResult?> captureAndSegmentImage({
     required CameraController controller,
-    required Interpreter interpreter,
   }) async {
-    SegmentationResult? result;
+    if (_isBusy) {
+      logger.w('Capture already in progress — ignoring tap');
+      return null;
+    }
+    _isBusy = true;
 
-    state = const AsyncLoading();
-    Uint8List? image =
-        await _captureImage(controller: controller, interpreter: interpreter);
-    if (image != null) {
-      result = await _removeBackgroundFromImage(
-        imageBytes: image,
-        interpreter: interpreter,
+    final previous = _current;
+    _beginWork(previous);
+
+    try {
+      final result = await ref
+          .read(imageProcessingRepositoryProvider)
+          .captureAndAnalyze(controller: controller);
+
+      // Exactly one terminal state per operation. The old code could emit two
+      // AsyncErrors for a single failure, which showed two stacked snackbars.
+      return result.fold(
+        (failure) {
+          _failWith(failure, previous);
+          return null;
+        },
+        (segmentation) {
+          state = AsyncData(previous);
+          return segmentation;
+        },
       );
-      state = AsyncData(state.value!);
-    } else {
-      logger.e('Error captureing image');
-      state = AsyncError('Error capturing image', StackTrace.current);
+    } finally {
+      _isBusy = false;
     }
-
-    if (result == null) {
-      logger.e('Error segmenting image');
-      state = AsyncError('Error segmenting image', StackTrace.current);
-    }
-
-    return result;
   }
 
-  Future<SegmentationResult?> pickImageFromGallery(
-      {required Interpreter? interpreter}) async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile =
-        await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile == null || interpreter == null) {
-      logger.e('No image selected or interpreter is null');
-      state = AsyncError("Error", StackTrace.current);
+  Future<SegmentationResult?> pickImageFromGallery() async {
+    if (_isBusy) {
+      logger.w('Analysis already in progress — ignoring gallery pick');
       return null;
     }
 
-    Uint8List imageBytes = await pickedFile.readAsBytes();
-
-    // Process the image (remove background)
-    final SegmentationResult? result = await _removeBackgroundFromImage(
-      imageBytes: imageBytes,
-      interpreter: interpreter,
-    );
-
-    if (result == null) {
-      logger.e('Error processing image from gallery');
-      state = AsyncError('Error processing image', StackTrace.current);
-    } else {
-      state = AsyncData(state.value!);
+    final XFile? pickedFile;
+    try {
+      pickedFile = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        // Without these a 48 MP photo is decoded at full size before it is
+        // scaled to 256x256 anyway.
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+    } catch (e) {
+      logger.e('Gallery picker failed: $e');
+      _failWith(
+        const ProcessingFailure('Could not open the gallery.'),
+        _current,
+      );
+      return null;
     }
-    return result;
+
+    if (pickedFile == null) {
+      // User cancelled — not an error, and must not leave the UI in a
+      // loading/error state.
+      return null;
+    }
+
+    _isBusy = true;
+    final previous = _current;
+    _beginWork(previous);
+
+    try {
+      final result = await ref
+          .read(imageProcessingRepositoryProvider)
+          .analyzeImageAt(imagePath: pickedFile.path);
+
+      return result.fold(
+        (failure) {
+          _failWith(failure, previous);
+          return null;
+        },
+        (segmentation) {
+          state = AsyncData(previous);
+          return segmentation;
+        },
+      );
+    } finally {
+      _isBusy = false;
+    }
   }
 
   void resetPrediction() {
@@ -93,88 +151,25 @@ class ImageProcessorNotifier extends AsyncNotifier<ImageProcessorState> {
   }
 
   void removeImage(int index) {
-    final updatedLccResult = List<int>.from(state.value!.lccResult)
-      ..removeAt(index);
-    state = AsyncData(ImageProcessorState(lccResult: updatedLccResult));
+    final results = List<int>.from(_current.lccResult);
+    if (index < 0 || index >= results.length) {
+      logger.w('removeImage($index) out of range for ${results.length} items');
+      return;
+    }
+    results.removeAt(index);
+    state = AsyncData(ImageProcessorState(lccResult: results));
   }
 
-  Future<Uint8List?> _captureImage({
-    required CameraController controller,
-    required Interpreter interpreter,
-  }) async {
-    Uint8List? image;
-
-    state = const AsyncLoading();
-    final repo = ref.watch(imageProcessingRepositoryProvider);
-
-    final result = await repo.takePicture(
-      controller: controller,
-      interpreter: interpreter,
-    );
-
-    // fold the result
-    result.fold(
-      (failure) {
-        state = AsyncError(failure.msg, StackTrace.current);
-        image = null;
-      },
-      (imageBytes) {
-        image = imageBytes;
-      },
-    );
-    return image;
-  }
-
-  Future<SegmentationResult?> _removeBackgroundFromImage({
-    required Uint8List imageBytes,
-    required Interpreter interpreter,
-  }) async {
-    SegmentationResult? output;
-    state = const AsyncLoading();
-    final repo = ref.watch(imageProcessingRepositoryProvider);
-    final result = await repo.removeBackgroundFromImage(
-      imageBytes: imageBytes,
-      interpreter: interpreter,
-    );
-
-    result.fold(
-      (failure) {
-        state = AsyncError(failure, StackTrace.current);
-      },
-      (segmentationResult) {
-        state = AsyncData(state.value!);
-        return output = segmentationResult;
-      },
-    );
-    return output;
-  }
-
-  Future<void> updateState({required int result}) async {
+  /// Records an accepted reading.
+  void addResult(int result) {
+    if (_current.isComplete) {
+      logger.w('Already have $kRequiredReadings readings — ignoring');
+      return;
+    }
     state = AsyncData(
-      ImageProcessorState(lccResult: [...state.value!.lccResult, result]),
+      ImageProcessorState(lccResult: [..._current.lccResult, result]),
     );
-    logger.i('Statee: ${state.value?.lccResult}');
-  }
-
-  Future<int> classifyImages({
-    required Interpreter interpreter,
-    required Uint8List segmentedImage,
-  }) async {
-    int lccResult = -1;
-    final repo = ref.watch(imageProcessingRepositoryProvider);
-    state = const AsyncLoading();
-    final result = await repo.runClassificatinModel(
-      interpreter: interpreter,
-      input: segmentedImage,
-    );
-
-    result.fold((error) {
-      state = AsyncError(error, StackTrace.current);
-    }, (outputLabel) {
-      state = AsyncData(state.value!);
-      lccResult = outputLabel;
-    });
-    return lccResult;
+    logger.i('Readings: ${_current.lccResult}');
   }
 }
 

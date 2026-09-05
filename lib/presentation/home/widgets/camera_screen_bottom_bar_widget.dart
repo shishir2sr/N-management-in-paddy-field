@@ -9,7 +9,8 @@ class CameraScreenBottomBarWidget extends StatelessWidget {
     this.iconColor = ColorConstants.primaryGreen,
   });
 
-  final Function() onImageCapture;
+  /// Null disables the shutter.
+  final VoidCallback? onImageCapture;
   final Color iconColor;
 
   @override

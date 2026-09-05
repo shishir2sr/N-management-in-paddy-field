@@ -19,6 +19,13 @@ mixin _$SegmentationResult {
   Uint8List get originalImage => throw _privateConstructorUsedError;
   Uint8List get outputImage => throw _privateConstructorUsedError;
 
+  /// LCC score (2..5) produced by the classification model.
+  ///
+  /// Classification used to run separately on the preview page, against an
+  /// interpreter with no listeners that could be disposed mid-`run()`. It now
+  /// comes back with the segmentation in a single isolate round trip.
+  int get lccLabel => throw _privateConstructorUsedError;
+
   @JsonKey(ignore: true)
   $SegmentationResultCopyWith<SegmentationResult> get copyWith =>
       throw _privateConstructorUsedError;
@@ -30,7 +37,7 @@ abstract class $SegmentationResultCopyWith<$Res> {
           SegmentationResult value, $Res Function(SegmentationResult) then) =
       _$SegmentationResultCopyWithImpl<$Res, SegmentationResult>;
   @useResult
-  $Res call({Uint8List originalImage, Uint8List outputImage});
+  $Res call({Uint8List originalImage, Uint8List outputImage, int lccLabel});
 }
 
 /// @nodoc
@@ -48,6 +55,7 @@ class _$SegmentationResultCopyWithImpl<$Res, $Val extends SegmentationResult>
   $Res call({
     Object? originalImage = null,
     Object? outputImage = null,
+    Object? lccLabel = null,
   }) {
     return _then(_value.copyWith(
       originalImage: null == originalImage
@@ -58,6 +66,10 @@ class _$SegmentationResultCopyWithImpl<$Res, $Val extends SegmentationResult>
           ? _value.outputImage
           : outputImage // ignore: cast_nullable_to_non_nullable
               as Uint8List,
+      lccLabel: null == lccLabel
+          ? _value.lccLabel
+          : lccLabel // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -70,7 +82,7 @@ abstract class _$$SegmentationResultImplCopyWith<$Res>
       __$$SegmentationResultImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Uint8List originalImage, Uint8List outputImage});
+  $Res call({Uint8List originalImage, Uint8List outputImage, int lccLabel});
 }
 
 /// @nodoc
@@ -86,6 +98,7 @@ class __$$SegmentationResultImplCopyWithImpl<$Res>
   $Res call({
     Object? originalImage = null,
     Object? outputImage = null,
+    Object? lccLabel = null,
   }) {
     return _then(_$SegmentationResultImpl(
       originalImage: null == originalImage
@@ -96,6 +109,10 @@ class __$$SegmentationResultImplCopyWithImpl<$Res>
           ? _value.outputImage
           : outputImage // ignore: cast_nullable_to_non_nullable
               as Uint8List,
+      lccLabel: null == lccLabel
+          ? _value.lccLabel
+          : lccLabel // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -104,7 +121,9 @@ class __$$SegmentationResultImplCopyWithImpl<$Res>
 
 class _$SegmentationResultImpl extends _SegmentationResult {
   const _$SegmentationResultImpl(
-      {required this.originalImage, required this.outputImage})
+      {required this.originalImage,
+      required this.outputImage,
+      required this.lccLabel})
       : super._();
 
   @override
@@ -112,9 +131,17 @@ class _$SegmentationResultImpl extends _SegmentationResult {
   @override
   final Uint8List outputImage;
 
+  /// LCC score (2..5) produced by the classification model.
+  ///
+  /// Classification used to run separately on the preview page, against an
+  /// interpreter with no listeners that could be disposed mid-`run()`. It now
+  /// comes back with the segmentation in a single isolate round trip.
+  @override
+  final int lccLabel;
+
   @override
   String toString() {
-    return 'SegmentationResult(originalImage: $originalImage, outputImage: $outputImage)';
+    return 'SegmentationResult(originalImage: $originalImage, outputImage: $outputImage, lccLabel: $lccLabel)';
   }
 
   @override
@@ -125,14 +152,17 @@ class _$SegmentationResultImpl extends _SegmentationResult {
             const DeepCollectionEquality()
                 .equals(other.originalImage, originalImage) &&
             const DeepCollectionEquality()
-                .equals(other.outputImage, outputImage));
+                .equals(other.outputImage, outputImage) &&
+            (identical(other.lccLabel, lccLabel) ||
+                other.lccLabel == lccLabel));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(originalImage),
-      const DeepCollectionEquality().hash(outputImage));
+      const DeepCollectionEquality().hash(outputImage),
+      lccLabel);
 
   @JsonKey(ignore: true)
   @override
@@ -145,13 +175,22 @@ class _$SegmentationResultImpl extends _SegmentationResult {
 abstract class _SegmentationResult extends SegmentationResult {
   const factory _SegmentationResult(
       {required final Uint8List originalImage,
-      required final Uint8List outputImage}) = _$SegmentationResultImpl;
+      required final Uint8List outputImage,
+      required final int lccLabel}) = _$SegmentationResultImpl;
   const _SegmentationResult._() : super._();
 
   @override
   Uint8List get originalImage;
   @override
   Uint8List get outputImage;
+  @override
+
+  /// LCC score (2..5) produced by the classification model.
+  ///
+  /// Classification used to run separately on the preview page, against an
+  /// interpreter with no listeners that could be disposed mid-`run()`. It now
+  /// comes back with the segmentation in a single isolate round trip.
+  int get lccLabel;
   @override
   @JsonKey(ignore: true)
   _$$SegmentationResultImplCopyWith<_$SegmentationResultImpl> get copyWith =>

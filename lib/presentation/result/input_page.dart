@@ -1,36 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:LCC/Utils/app_fonts.dart';
 import 'package:LCC/application/result_notifier_provider.dart';
 import 'package:LCC/core/shared/color_constants.dart';
-import 'package:LCC/core/shared/logging_service.dart';
 import 'package:LCC/infrastructure/land_conversion_service.dart';
 import 'package:LCC/presentation/home/home_page.dart';
 import 'package:LCC/presentation/result/result_page.dart';
 import 'package:LCC/presentation/result/widgets/amount_of_land_text_form_field_widget.dart';
 import 'package:LCC/presentation/result/widgets/land_conversion_selection_widget.dart';
 
-class LandInputPage extends ConsumerWidget {
-  LandInputPage({super.key})
-      : landInputTextEditingController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController landInputTextEditingController;
+/// Was a `ConsumerWidget` that constructed a `TextEditingController` and a
+/// `GlobalKey` in its constructor. Route builders can run more than once, so
+/// each rebuild allocated a fresh controller that was never disposed, and two
+/// live widgets could end up sharing one `GlobalKey`.
+class LandInputPage extends ConsumerStatefulWidget {
+  const LandInputPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final resultNotifier = ref.read(resultNotifierProvider.notifier);
+  ConsumerState<LandInputPage> createState() => _LandInputPageState();
+}
 
-    final List<LandConversionStrategy> conversionStrategies = [
+class _LandInputPageState extends ConsumerState<LandInputPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _landInputController = TextEditingController();
+  bool _submitting = false;
+
+  @override
+  void dispose() {
+    _landInputController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_submitting) return;
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+
+    final amount = double.tryParse(_landInputController.text.trim());
+    if (amount == null) return;
+
+    setState(() => _submitting = true);
+    try {
+      final outcome = await ref
+          .read(resultNotifierProvider.notifier)
+          .calculateNitrogenRequirement(landAmount: amount);
+
+      if (!mounted) return;
+
+      switch (outcome) {
+        case CalculationOutcome.noReadings:
+          showSnackBar(
+            context,
+            'Capture at least one leaf reading before getting a '
+            'recommendation.',
+          );
+        case CalculationOutcome.invalidAmount:
+          showSnackBar(context, 'Enter a land amount greater than zero.');
+        case CalculationOutcome.success:
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ResultScreen()),
+          );
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final conversionStrategies = <LandConversionStrategy>[
       ref.read(bighaConverterProvicer),
       ref.read(acresConverterProvicer),
       ref.read(decimalsConverterProvicer),
       ref.read(shotokConverterProvicer),
       ref.read(kathaConverterProvicer),
     ];
+
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: getAppBar(title: "Land Input"),
@@ -42,19 +90,13 @@ class LandInputPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // add a image widget here to show the land image
                 SizedBox(
                   height: 200,
                   width: 200,
                   child: Image.asset('assets/images/paddy.png'),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                AmountOfLandTextFormField(
-                  controller: landInputTextEditingController,
-                ),
+                const SizedBox(height: 20),
+                AmountOfLandTextFormField(controller: _landInputController),
                 const SizedBox(height: 20),
                 LandConversionSelectionWidget(
                   dropdownItemList: _getDropDownItems(conversionStrategies),
@@ -69,32 +111,26 @@ class LandInputPage extends ConsumerWidget {
                     ),
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      logger.d(
-                          "Land Input Page: ${landInputTextEditingController.text}");
-                      final landAmount =
-                          num.parse(landInputTextEditingController.text)
-                              .toDouble();
-                      resultNotifier.calculateNitrogenRequirement(
-                          landAmount: landAmount);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ResultScreen(),
+                  onPressed: _submitting ? null : _submit,
+                  child: _submitting
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'Get Recommendation',
+                          style: TextStyle(
+                            fontFamily: AppFonts.MANROPE,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      );
-                    }
-                  },
-                  child: const Text('Get Recommendation',
-                      style: TextStyle(
-                          fontFamily: AppFonts.MANROPE,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600)),
                 ),
-                const SizedBox(
-                  height: 40,
-                ),
+                const SizedBox(height: 40),
               ],
             ),
           ),

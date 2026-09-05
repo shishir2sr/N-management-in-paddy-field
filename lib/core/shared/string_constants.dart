@@ -4,5 +4,4 @@ class StrConsts {
       'assets/tflite/final_segmentaion_model.tflite';
   static const String classificationModelPath =
       'assets/tflite/final_lcc_model.tflite';
-  static const String testImagePath = 'assets/images/2 (12).jpg';
 }

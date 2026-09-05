@@ -91,8 +91,7 @@ class __$$ImageProcessorStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ImageProcessorStateImpl extends _ImageProcessorState
-    with DiagnosticableTreeMixin {
+class _$ImageProcessorStateImpl extends _ImageProcessorState {
   const _$ImageProcessorStateImpl({required final List<int> lccResult})
       : _lccResult = lccResult,
         super._();
@@ -106,16 +105,8 @@ class _$ImageProcessorStateImpl extends _ImageProcessorState
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+  String toString() {
     return 'ImageProcessorState(lccResult: $lccResult)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ImageProcessorState'))
-      ..add(DiagnosticsProperty('lccResult', lccResult));
   }
 
   @override

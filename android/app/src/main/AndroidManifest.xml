@@ -1,11 +1,20 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.just.LCC">
->
-    
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Declared explicitly rather than relying on plugin manifest merging, so
+         Play Store device filtering works and the permission set is auditable
+         from one place. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Required: the app captures photos and runs two on-device ML models. -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
     <application
         android:label="LCC"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/launcher_icon"
+        android:largeHeap="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"

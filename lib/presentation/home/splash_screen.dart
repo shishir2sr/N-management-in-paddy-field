@@ -1,96 +1,98 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_progress_indicators/simple_progress_indicators.dart';
+
 import 'package:LCC/Utils/app_icons.dart';
+import 'package:LCC/core/shared/logging_service.dart';
 import 'package:LCC/presentation/home/home_page.dart';
 import 'package:LCC/presentation/home/slider_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
-    // Simulate a delay before navigating to the next screen
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        checkIfAlreadyHovered().then((isAlreadyHovered) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoaderOverlay(
-                  child:
-                      isAlreadyHovered ? const HomePage() : const SliderPage()),
-            ),
-          );
-        });
-      }
-    });
+    // Held so it can be cancelled — an uncancelled Future.delayed kept firing
+    // after the route was gone.
+    _timer = Timer(const Duration(seconds: 2), _goToNextScreen);
   }
 
-  Future checkIfAlreadyHovered() async {
-    var pref = await SharedPreferences.getInstance();
-    var hovered = pref.getBool('hovered') ?? false;
-    return hovered;
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _goToNextScreen() async {
+    final hasSeenOnboarding = await _hasSeenOnboarding();
+
+    // Checked *after* the await, not before it. The old code checked `mounted`
+    // before reading SharedPreferences, then used `context` afterwards — if the
+    // app was backgrounded during that window it threw "Looking up a
+    // deactivated widget's ancestor is unsafe".
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => hasSeenOnboarding ? const HomePage() : const SliderPage(),
+      ),
+    );
+  }
+
+  Future<bool> _hasSeenOnboarding() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool('hovered') ?? false;
+    } catch (e) {
+      logger.w('Could not read the onboarding flag: $e');
+      return false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(AppIcons.splashBG),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Background Image
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(AppIcons.splashBG),
-                  fit: BoxFit.cover,
+            SizedBox(
+              width: 150,
+              height: 150,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image.asset(
+                  AppIcons.splashLogo,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  colorBlendMode: BlendMode.modulate,
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Icon
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Image.asset(
-                        AppIcons.splashLogo,
-                        color: Colors.white.withOpacity(0.8),
-                        colorBlendMode: BlendMode.modulate,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 93),
-
-                  ProgressBarAnimation(
-                    width: 174,
-                    duration: const Duration(seconds: 2),
-                    color: const Color(0xFF1C4821).withOpacity(0.8),
-                    backgroundColor: Colors.grey,
-                  ),
-                ],
-              ),
+            ),
+            const SizedBox(height: 93),
+            ProgressBarAnimation(
+              width: 174,
+              duration: const Duration(seconds: 2),
+              color: const Color(0xFF1C4821).withValues(alpha: 0.8),
+              backgroundColor: Colors.grey,
             ),
           ],
         ),

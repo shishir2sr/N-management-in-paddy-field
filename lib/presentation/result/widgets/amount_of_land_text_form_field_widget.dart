@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:LCC/Utils/app_fonts.dart';
 
 import 'package:LCC/core/shared/color_constants.dart';
+
+/// Accepts digits and at most one `.`, rejecting everything else at the input
+/// layer. `keyboardType` alone is only a hint — a hardware keyboard, a paste,
+/// or a locale that uses `,` as the decimal separator all get through it, and
+/// the old unguarded `num.parse` then threw `FormatException`.
+final _decimalFormatter = FilteringTextInputFormatter.allow(
+  RegExp(r'^\d*\.?\d*'),
+);
 
 class AmountOfLandTextFormField extends StatelessWidget {
   const AmountOfLandTextFormField({
@@ -47,10 +56,18 @@ class AmountOfLandTextFormField extends StatelessWidget {
         ),
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
-      keyboardType: TextInputType.number,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [_decimalFormatter],
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if (value == null || value.trim().isEmpty) {
           return 'Please enter amount of land!';
+        }
+        final amount = double.tryParse(value.trim());
+        if (amount == null) {
+          return 'Enter a number, for example 1.5';
+        }
+        if (amount <= 0) {
+          return 'Amount of land must be greater than zero';
         }
         return null;
       },
