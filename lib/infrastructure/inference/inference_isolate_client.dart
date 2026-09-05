@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:isolate';
 
 import 'package:LCC/core/shared/logging_service.dart';
@@ -31,12 +30,10 @@ class InferenceIsolateClient {
   InferenceIsolateClient({
     this.segmentationAssetKey = StrConsts.segmentationModelPath,
     this.classificationAssetKey = StrConsts.classificationModelPath,
-    int? threads,
-  }) : threads = threads ?? Platform.numberOfProcessors.clamp(1, 4);
+  });
 
   final String segmentationAssetKey;
   final String classificationAssetKey;
-  final int threads;
 
   /// Generous: on a cold first run this covers copying ~40 MB of models out of
   /// the asset bundle before either interpreter is built.
@@ -229,7 +226,6 @@ class InferenceIsolateClient {
           replyPort: responsePort.sendPort,
           segmentationModelPath: modelPaths[0],
           classificationModelPath: modelPaths[1],
-          threads: threads,
         ),
         onError: errorPort.sendPort,
         onExit: exitPort.sendPort,

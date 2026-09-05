@@ -35,14 +35,15 @@ Future<void> inferenceIsolateEntry(InferenceInit init) async {
     // `fromFile` maps the model with `TfLiteModelCreateFromFile`. `fromAsset`
     // would route through `Model.fromBuffer`, which `calloc`s the entire
     // flatbuffer and never frees it — a permanent ~24 MB native leak per load.
-    segmentation = Interpreter.fromFile(
-      segmentationFile,
-      options: InterpreterOptions()..threads = init.threads,
-    );
-    classification = Interpreter.fromFile(
-      classificationFile,
-      options: InterpreterOptions()..threads = init.threads,
-    );
+    // No `InterpreterOptions` — deliberately. Calling
+    // `TfLiteInterpreterOptionsSetNumThreads` at all wrecks this segmentation
+    // graph on the 2.11.0 runtime: measured on device, 4 threads produced an
+    // all-zero mask, 1 thread produced a mask covering 0.1% of the frame, and
+    // leaving the option unset (what `Interpreter.fromAsset` used to do)
+    // produced a clean leaf silhouette at 8-10% coverage with max 0.997.
+    // ponytail: do not add options here without re-running that comparison.
+    segmentation = Interpreter.fromFile(segmentationFile);
+    classification = Interpreter.fromFile(classificationFile);
 
     final segIn = segmentation.getInputTensor(0);
     final segOut = segmentation.getOutputTensor(0);
@@ -200,7 +201,7 @@ AnalyzeSuccess _analyze({
     resized = resized.convert(numChannels: 3);
   }
 
-  final Uint8List originalPng;
+  Uint8List originalPng;
   try {
     originalPng = Uint8List.fromList(img.encodePng(resized));
   } catch (e) {

@@ -15,7 +15,6 @@ class InferenceInit {
     required this.replyPort,
     required this.segmentationModelPath,
     required this.classificationModelPath,
-    required this.threads,
   });
 
   final SendPort replyPort;
@@ -26,8 +25,6 @@ class InferenceInit {
   /// therefore needs no binding of its own.
   final String segmentationModelPath;
   final String classificationModelPath;
-
-  final int threads;
 }
 
 sealed class InferenceRequest {
@@ -82,6 +79,10 @@ class IsolateReady extends InferenceResponse {
       'cls: $classificationInputShape -> $classificationOutputShape)';
 }
 
+/// ponytail: temporary. When true, the preview page shows the exact bytes the
+/// segmentation model was fed as the "before" image, and the model's raw mask
+/// (grayscale, unthresholded) as the "after" image. Flip to false — and delete
+/// everything it guards — once the segmentation output is confirmed good.
 class AnalyzeSuccess extends InferenceResponse {
   const AnalyzeSuccess({
     required int id,
