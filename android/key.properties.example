@@ -1,0 +1,14 @@
+# Copy to android/key.properties (gitignored) and fill in real values.
+#
+# Never commit the filled-in file. The previous hardcoded credentials are in
+# this repository's git history, so the key they protected must be rotated and a
+# new upload key generated:
+#
+#   keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA \
+#           -keysize 2048 -validity 10000 -alias upload
+#
+# storeFile is resolved relative to android/app/.
+storeFile=upload-keystore.jks
+storePassword=
+keyAlias=upload
+keyPassword=

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:LCC/Utils/app_fonts.dart';
 import 'package:LCC/Utils/app_icons.dart';
+import 'package:LCC/core/shared/logging_service.dart';
 import 'package:LCC/presentation/home/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,7 @@ class SliderPage extends StatefulWidget {
   const SliderPage({super.key});
 
   @override
-  _SliderPageState createState() => _SliderPageState();
+  State<SliderPage> createState() => _SliderPageState();
 }
 
 class _SliderPageState extends State<SliderPage> {
@@ -21,14 +22,24 @@ class _SliderPageState extends State<SliderPage> {
     // Add more image paths as needed
   ];
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  Future<void> _finishOnboarding() async {
+    // Awaited before navigating. Fire-and-forget meant that killing the app
+    // right after tapping through onboarding left the flag unwritten, so the
+    // tour replayed on the next launch.
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('hovered', true);
+    } catch (e) {
+      logger.w('Could not persist the onboarding flag: $e');
+    }
 
-  saveHoverInfoToSp() async {
-    var pref = await SharedPreferences.getInstance();
-    await pref.setBool('hovered', true);
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const HomePage()),
+      (route) => false,
+    );
   }
 
   @override
@@ -51,12 +62,10 @@ class _SliderPageState extends State<SliderPage> {
               },
             ),
             items: landingStyles.map((style) {
-              return Container(
-                child: Image.asset(
-                  style.backgroundImage,
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width,
-                ),
+              return Image.asset(
+                style.backgroundImage,
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,
               );
             }).toList(),
           ),
@@ -96,17 +105,15 @@ class _SliderPageState extends State<SliderPage> {
                   ),
                   const SizedBox(height: 20),
                   Center(
-                    child: Container(
-                      child: Text(
-                        landingStyles[_currentIndex].description,
-                        maxLines: 3,
-                        style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontFamily: AppFonts.MANROPE),
-                        textAlign: TextAlign.justify,
-                      ),
+                    child: Text(
+                      landingStyles[_currentIndex].description,
+                      maxLines: 3,
+                      style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontFamily: AppFonts.MANROPE),
+                      textAlign: TextAlign.justify,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -121,16 +128,7 @@ class _SliderPageState extends State<SliderPage> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(
                           20), // Match container's borderRadius
-                      onTap: () {
-                        saveHoverInfoToSp();
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
-                      },
+                      onTap: _finishOnboarding,
                       child: const Center(
                         child: Text(
                           'Proceed',

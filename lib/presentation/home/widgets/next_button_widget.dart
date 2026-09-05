@@ -57,8 +57,8 @@ class _NextButtonWidgetState extends State<NextButtonWidget>
               width: buttonSize + 10,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.green.withOpacity(
-                    0.3), // Adjust the color and opacity of the pulsing effect
+                // Colour and opacity of the pulsing effect
+                color: Colors.green.withValues(alpha: 0.3),
               ),
             ),
           ),

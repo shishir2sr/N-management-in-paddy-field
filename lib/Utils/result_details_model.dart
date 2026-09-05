@@ -1,20 +1,18 @@
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 0)
+/// The adapter below is hand-written, so the `@HiveType`/`@HiveField`
+/// annotations are deliberately omitted — with them present `hive_generator`
+/// warns on every build that a `part 'result_details_model.g.dart'` directive
+/// is missing, for a generated adapter that is never used.
 class ResultStateDetails extends HiveObject {
-  @HiveField(0)
   final double landAmountInBigha;
 
-  @HiveField(1)
   final String recommendation;
 
-  @HiveField(2)
   final DateTime date;
 
-  @HiveField(3)
   final double averageLLC;
 
-  @HiveField(4)
   final double ureaNeeded;
 
   ResultStateDetails({
@@ -41,12 +39,17 @@ class ResultStateDetailsAdapter extends TypeAdapter<ResultStateDetails> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
+    // Nullable casts with defaults. Straight `as double` casts meant a record
+    // written by a build with a different field set threw
+    // `_TypeError: null is not a subtype of double` from inside the History
+    // page's ValueListenableBuilder, red-screening the whole screen with no way
+    // to recover short of clearing app data.
     return ResultStateDetails(
-      landAmountInBigha: fields[0] as double,
-      recommendation: fields[1] as String,
-      date: fields[2] as DateTime,
-      averageLLC: fields[3] as double,
-      ureaNeeded: fields[4] as double,
+      landAmountInBigha: (fields[0] as num?)?.toDouble() ?? 0.0,
+      recommendation: fields[1] as String? ?? '',
+      date: fields[2] as DateTime? ?? DateTime.fromMillisecondsSinceEpoch(0),
+      averageLLC: (fields[3] as num?)?.toDouble() ?? 0.0,
+      ureaNeeded: (fields[4] as num?)?.toDouble() ?? 0.0,
     );
   }
 

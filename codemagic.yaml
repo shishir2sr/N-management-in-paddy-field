@@ -3,25 +3,32 @@ workflows:
     name: Android Build
     environment:
       flutter: stable
-      - keystore_reference
-      android-sdk-components: 
-        - "build-tools;34.0.0" 
-        - "platforms;android-34" 
+      # Was a bare sequence item directly under `environment:`, which is not a
+      # valid key there — signing credentials were never actually loaded.
+      groups:
+        - keystore_reference
+      android-sdk-components:
+        - "build-tools;35.0.0"
+        - "platforms;android-35"
+        # Required now that defaultConfig declares ndk.abiFilters.
+        - "ndk;28.2.13676358"
     scripts:
-    - name: Set up local.properties
-      script: | 
-        echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
-    - name: Get Flutter packages
-      script: | 
-        flutter pub get
-    - name: Build AAB with Flutter
-      script: | 
-        flutter build appbundle --release
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Analyze
+        script: |
+          flutter analyze
+      - name: Test
+        script: |
+          flutter test
+      - name: Build AAB with Flutter
+        script: |
+          flutter build appbundle --release
     artifacts:
-    - build/**/outputs/**/*.aab
-    - build/**/outputs/**/mapping.txt
-    - flutter_drive.log
-     
-  
-    
-        
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log

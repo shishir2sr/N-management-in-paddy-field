@@ -10,5 +10,6 @@
     "**/*.g.dart": false,
     "**/.gitkeep": false
   },
-  "explorerExclude.backup": {}
+  "explorerExclude.backup": {},
+  "explorerExcludeManager.backup": {}
 }

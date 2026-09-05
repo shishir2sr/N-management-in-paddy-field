@@ -21,7 +21,7 @@ class BottomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.8),
+            color: Colors.grey.withValues(alpha: 0.8),
             spreadRadius: 1,
             blurRadius: 3,
             offset: const Offset(0, 1), // changes position of shadow
@@ -72,7 +72,7 @@ class SecondaryLccButtonWidget extends StatelessWidget {
       buttonColor: ColorConstants.secondaryBackgroundColor,
       buttonIcon: Icon(
         icon,
-        color: iconColor.withOpacity(0.8),
+        color: iconColor.withValues(alpha: 0.8),
         size: 26,
         weight: FontWeight.bold.value.toDouble(),
       ),

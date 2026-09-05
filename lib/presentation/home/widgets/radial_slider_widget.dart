@@ -70,7 +70,7 @@ class RadialSliderWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
+                            color: Colors.grey.withValues(alpha: 0.5),
                             spreadRadius: 3,
                             blurRadius: 5,
                             offset: const Offset(0, 0))
@@ -103,7 +103,7 @@ class RadialSliderWidget extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black.withOpacity(0.5),
+                                    color: Colors.black.withValues(alpha: 0.5),
                                     fontFamily: AppFonts.MANROPE,
                                   ),
                                   textAlign: TextAlign.center,

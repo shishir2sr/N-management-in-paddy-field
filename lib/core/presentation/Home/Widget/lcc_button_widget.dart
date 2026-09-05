@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-typedef OnPressCallBackFunction = void Function();
+/// Nullable so a null callback renders the button in its disabled state —
+/// used to block the shutter while a capture is already in flight.
+typedef OnPressCallBackFunction = void Function()?;
 
 class LccButtonWidget extends StatelessWidget {
   const LccButtonWidget(

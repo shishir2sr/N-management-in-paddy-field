@@ -20,6 +20,8 @@ mixin _$ResultState {
   LandConversionStrategy get selectedStrategy =>
       throw _privateConstructorUsedError;
   String get recommendation => throw _privateConstructorUsedError;
+  double get averageLcc => throw _privateConstructorUsedError;
+  double get ureaNeeded => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ResultStateCopyWith<ResultState> get copyWith =>
@@ -35,7 +37,9 @@ abstract class $ResultStateCopyWith<$Res> {
   $Res call(
       {double landAmountInBigha,
       LandConversionStrategy selectedStrategy,
-      String recommendation});
+      String recommendation,
+      double averageLcc,
+      double ureaNeeded});
 }
 
 /// @nodoc
@@ -54,6 +58,8 @@ class _$ResultStateCopyWithImpl<$Res, $Val extends ResultState>
     Object? landAmountInBigha = null,
     Object? selectedStrategy = null,
     Object? recommendation = null,
+    Object? averageLcc = null,
+    Object? ureaNeeded = null,
   }) {
     return _then(_value.copyWith(
       landAmountInBigha: null == landAmountInBigha
@@ -68,6 +74,14 @@ class _$ResultStateCopyWithImpl<$Res, $Val extends ResultState>
           ? _value.recommendation
           : recommendation // ignore: cast_nullable_to_non_nullable
               as String,
+      averageLcc: null == averageLcc
+          ? _value.averageLcc
+          : averageLcc // ignore: cast_nullable_to_non_nullable
+              as double,
+      ureaNeeded: null == ureaNeeded
+          ? _value.ureaNeeded
+          : ureaNeeded // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -83,7 +97,9 @@ abstract class _$$ResultStateImplCopyWith<$Res>
   $Res call(
       {double landAmountInBigha,
       LandConversionStrategy selectedStrategy,
-      String recommendation});
+      String recommendation,
+      double averageLcc,
+      double ureaNeeded});
 }
 
 /// @nodoc
@@ -100,6 +116,8 @@ class __$$ResultStateImplCopyWithImpl<$Res>
     Object? landAmountInBigha = null,
     Object? selectedStrategy = null,
     Object? recommendation = null,
+    Object? averageLcc = null,
+    Object? ureaNeeded = null,
   }) {
     return _then(_$ResultStateImpl(
       landAmountInBigha: null == landAmountInBigha
@@ -114,17 +132,27 @@ class __$$ResultStateImplCopyWithImpl<$Res>
           ? _value.recommendation
           : recommendation // ignore: cast_nullable_to_non_nullable
               as String,
+      averageLcc: null == averageLcc
+          ? _value.averageLcc
+          : averageLcc // ignore: cast_nullable_to_non_nullable
+              as double,
+      ureaNeeded: null == ureaNeeded
+          ? _value.ureaNeeded
+          : ureaNeeded // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
 
 /// @nodoc
 
-class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
+class _$ResultStateImpl extends _ResultState {
   _$ResultStateImpl(
       {required this.landAmountInBigha,
       required this.selectedStrategy,
-      required this.recommendation})
+      required this.recommendation,
+      required this.averageLcc,
+      required this.ureaNeeded})
       : super._();
 
   @override
@@ -133,20 +161,14 @@ class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
   final LandConversionStrategy selectedStrategy;
   @override
   final String recommendation;
+  @override
+  final double averageLcc;
+  @override
+  final double ureaNeeded;
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ResultState(landAmountInBigha: $landAmountInBigha, selectedStrategy: $selectedStrategy, recommendation: $recommendation)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'ResultState'))
-      ..add(DiagnosticsProperty('landAmountInBigha', landAmountInBigha))
-      ..add(DiagnosticsProperty('selectedStrategy', selectedStrategy))
-      ..add(DiagnosticsProperty('recommendation', recommendation));
+  String toString() {
+    return 'ResultState(landAmountInBigha: $landAmountInBigha, selectedStrategy: $selectedStrategy, recommendation: $recommendation, averageLcc: $averageLcc, ureaNeeded: $ureaNeeded)';
   }
 
   @override
@@ -159,12 +181,16 @@ class _$ResultStateImpl extends _ResultState with DiagnosticableTreeMixin {
             (identical(other.selectedStrategy, selectedStrategy) ||
                 other.selectedStrategy == selectedStrategy) &&
             (identical(other.recommendation, recommendation) ||
-                other.recommendation == recommendation));
+                other.recommendation == recommendation) &&
+            (identical(other.averageLcc, averageLcc) ||
+                other.averageLcc == averageLcc) &&
+            (identical(other.ureaNeeded, ureaNeeded) ||
+                other.ureaNeeded == ureaNeeded));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, landAmountInBigha, selectedStrategy, recommendation);
+  int get hashCode => Object.hash(runtimeType, landAmountInBigha,
+      selectedStrategy, recommendation, averageLcc, ureaNeeded);
 
   @JsonKey(ignore: true)
   @override
@@ -177,7 +203,9 @@ abstract class _ResultState extends ResultState {
   factory _ResultState(
       {required final double landAmountInBigha,
       required final LandConversionStrategy selectedStrategy,
-      required final String recommendation}) = _$ResultStateImpl;
+      required final String recommendation,
+      required final double averageLcc,
+      required final double ureaNeeded}) = _$ResultStateImpl;
   _ResultState._() : super._();
 
   @override
@@ -186,6 +214,10 @@ abstract class _ResultState extends ResultState {
   LandConversionStrategy get selectedStrategy;
   @override
   String get recommendation;
+  @override
+  double get averageLcc;
+  @override
+  double get ureaNeeded;
   @override
   @JsonKey(ignore: true)
   _$$ResultStateImplCopyWith<_$ResultStateImpl> get copyWith =>

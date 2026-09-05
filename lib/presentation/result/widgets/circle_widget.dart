@@ -19,13 +19,13 @@ class CircleWidget extends StatelessWidget {
           border: isShadowEnabled
               ? Border.all(color: Colors.white)
               : Border.all(
-                  color: Colors.grey.withOpacity(0.4),
+                  color: Colors.grey.withValues(alpha: 0.4),
                   width: 1.5,
                 ),
           boxShadow: isShadowEnabled
               ? [
                   BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
+                      color: Colors.grey.withValues(alpha: 0.4),
                       spreadRadius: 3,
                       blurRadius: 5,
                       offset: const Offset(0, 0))
@@ -33,7 +33,7 @@ class CircleWidget extends StatelessWidget {
               : [],
           shape: BoxShape.circle,
           color:
-              isShadowEnabled ? Colors.green.withOpacity(0.2) : Colors.white),
+              isShadowEnabled ? Colors.green.withValues(alpha: 0.2) : Colors.white),
       height: circleWidth,
       width: circleWidth,
       child: Center(child: child),
