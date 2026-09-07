@@ -4,91 +4,53 @@ This privacy policy applies to the LCC app (hereby referred to as "Application")
 
 **Information Collection and Use**
 
-The Application collects information when you download and use it. This information may include information such as
+The Application does not collect, transmit, or share any personal information or usage data. All processing, including image analysis and model inference, happens entirely on your device. The Application does not gather your IP address, location, browsing activity, or any other information about you or your device usage.
 
-*   Your device's Internet Protocol address (e.g. IP address)
-*   The pages of the Application that you visit, the time and date of your visit, the time spent on those pages
-*   The time spent on the Application
-*   The operating system you use on your mobile device
+Device information (such as hardware model) may be read locally by the Application solely to determine compatibility, and is never transmitted anywhere.
 
-The Application does not gather precise information about the location of your mobile device.
+App settings/preferences are stored locally on your device only.
 
-The Application collects your device's location, which helps the Service Provider determine your approximate geographical location and make use of in below ways:
+**Camera Permission**
 
-*   Geolocation Services: The Service Provider utilizes location data to provide features such as personalized content, relevant recommendations, and location-based services.
-*   Analytics and Improvements: Aggregated and anonymized location data helps the Service Provider to analyze user behavior, identify trends, and improve the overall performance and functionality of the Application.
-*   Third-Party Services: Periodically, the Service Provider may transmit anonymized location data to external services. These services assist them in enhancing the Application and optimizing their offerings.
+The Application requires access to your device's camera to capture images of rice/paddy fields for nitrogen level analysis.
 
-The Service Provider may use the information you provided to contact you from time to time to provide you with important information, required notices and marketing promotions.
-
-For a better experience, while using the Application, the Service Provider may require you to provide us with certain personally identifiable information. The information that the Service Provider request will be retained by them and used as described in this privacy policy.
+*   Images are processed entirely on your device to analyze nitrogen content.
+*   Images may be temporarily stored on your device for analysis purposes and are never uploaded or transmitted anywhere.
+*   You can delete stored images from the Application at any time.
+*   You can deny or revoke camera permission at any time through your device settings.
 
 **Third Party Access**
 
-Only aggregated, anonymized data is periodically transmitted to external services to aid the Service Provider in improving the Application and their service. The Service Provider may share your information with third parties in the ways that are described in this privacy statement.
+The Application does not transmit any data to third parties. No aggregated, anonymized, or raw data leaves your device.
 
-Please note that the Application utilizes third-party services that have their own Privacy Policy about handling data. Below are the links to the Privacy Policy of the third-party service providers used by the Application:
-
-*   [Google Play Services](https://www.google.com/policies/privacy/)
-
-The Service Provider may disclose User Provided and Automatically Collected Information:
-
-*   as required by law, such as to comply with a subpoena, or similar legal process;
-*   when they believe in good faith that disclosure is necessary to protect their rights, protect your safety or the safety of others, investigate fraud, or respond to a government request;
-*   with their trusted services providers who work on their behalf, do not have an independent use of the information we disclose to them, and have agreed to adhere to the rules set forth in this privacy statement.
+The Application may use standard Google Play Services required for app distribution; the Application itself does not send any user or usage data to Google Play Services or any other service.
 
 **Opt-Out Rights**
 
-You can stop all collection of information by the Application easily by uninstalling it. You may use the standard uninstall processes as may be available as part of your mobile device or via the mobile application marketplace or network.
+Since no information is collected, there is nothing to opt out of. You may uninstall the Application at any time using standard uninstall processes on your device.
 
 **Data Retention Policy**
 
-The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at yasirarefinxz@gmail.com and they will respond in a reasonable time.
+The Service Provider does not collect or retain any user data, so no retention period applies.
 
 **Children**
 
-The Service Provider does not use the Application to knowingly solicit data from or market to children under the age of 13.
-
-The Application does not address anyone under the age of 13. The Service Provider does not knowingly collect personally identifiable information from children under 13 years of age. In the case the Service Provider discover that a child under 13 has provided personal information, the Service Provider will immediately delete this from their servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact the Service Provider (yasirarefinxz@gmail.com) so that they will be able to take the necessary actions.
+The Application does not knowingly target, market to, or collect information from children under 13, or from anyone, since it collects no personal information from any user.
 
 **Security**
 
-The Service Provider is concerned about safeguarding the confidentiality of your information. The Service Provider provides physical, electronic, and procedural safeguards to protect information the Service Provider processes and maintains.
+Because no data is collected or transmitted off your device, there is no user data to secure on servers. Device security remains the responsibility of your device's own operating system protections.
 
 **Changes**
 
-This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes to the Privacy Policy by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.
+This Privacy Policy may be updated from time to time for any reason. The Service Provider will notify you of any changes by updating this page with the new Privacy Policy. You are advised to consult this Privacy Policy regularly for any changes, as continued use is deemed approval of all changes.
 
-This privacy policy is effective as of 2025-04-12
+This privacy policy is effective as of 2026-09-07.
 
 **Your Consent**
 
-By using the Application, you are consenting to the processing of your information as set forth in this Privacy Policy now and as amended by us.
+By using the Application, you are consenting to this Privacy Policy.
 
 **Contact Us**
 
-If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at yeasirarefin@just.edu.bd
-
-## Camera Permission
-
-Our application requires access to your device's camera to perform the following functions:
-
-- To capture images of rice/paddy fields for nitrogen level analysis
-
-### How We Use Camera Data
-Images captured through the camera are:
-- Processed locally on your device to analyze nitrogen content
-- May be temporarily stored on your device for analysis purposes
-- Used to generate recommendations for nitrogen management
-
-### Data Storage and Sharing
-- Images are primarily processed on your device
-- We do not share your camera data with third parties without your explicit consent
-- You can delete stored images from the application at any time
-
-### User Controls
-You can:
-- Deny or revoke camera permissions through your device settings
-
-If you have concerns about the camera permission, please contact us at yeasirarefin@just.edu.bd
-
+If you have any questions regarding privacy while using the Application, please contact the Service Provider via email at yeasirarefin@just.edu.bd.

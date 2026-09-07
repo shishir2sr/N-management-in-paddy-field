@@ -1,10 +1,15 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Declared explicitly rather than relying on plugin manifest merging, so
          Play Store device filtering works and the permission set is auditable
          from one place. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- camera_android_camerax merges this in unconditionally for video
+         recording; app is photo-only (enableAudio: false), so strip it. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" tools:node="remove" />
 
     <!-- Required: the app captures photos and runs two on-device ML models. -->
     <uses-feature android:name="android.hardware.camera" android:required="true" />

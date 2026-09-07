@@ -40,7 +40,7 @@ def hasReleaseSigning = hasCiSigning || keystorePropertiesFile.exists()
 
 android {
     namespace = "com.just.LCC"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     // Declaring abiFilters below makes Gradle resolve the NDK, so this has to
     // name a version that is actually installed (or downloadable). The previous
     // pin, 27.0.12077973, was never resolved because nothing consumed it.
@@ -68,7 +68,7 @@ android {
         // Android 8.0. The two TFLite models total ~40 MB on disk and their
         // tensor arenas are considerably larger again.
         minSdk = 26
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 36
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
 
